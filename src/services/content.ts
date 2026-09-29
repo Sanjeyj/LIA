@@ -151,7 +151,11 @@ export async function getMergedClubInfo(): Promise<ClubInfo> {
       sponsorClub: settings.sponsor_club || CLUB_INFO.sponsorClub,
       rotaryYear: settings.rotary_year || CLUB_INFO.rotaryYear,
       currentTheme: settings.current_theme || CLUB_INFO.currentTheme,
-      themeStatementPlaceholder: CLUB_INFO.themeStatementPlaceholder,
+      themeStatementPlaceholder: CLUB_INFO.teamThemeStatement, // backward compat
+      teamTheme: CLUB_INFO.teamTheme,
+      teamThemeTagline: CLUB_INFO.teamThemeTagline,
+      teamThemeStatement: CLUB_INFO.teamThemeStatement,
+      teamThemeVision: CLUB_INFO.teamThemeVision,
       president: {
         name: settings.president_name || CLUB_INFO.president.name,
         title: settings.president_title || CLUB_INFO.president.title,

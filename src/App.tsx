@@ -15,6 +15,7 @@ import { JoinUs } from "./components/JoinUs";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { SEO } from "./components/SEO";
+import { CinematicBackground } from "./components/CinematicBackground";
 import { CLUB_INFO } from "./data/club";
 import { SITE_CONFIG } from "./config/site";
 
@@ -55,14 +56,14 @@ export function App() {
   };
 
   const handleExploreClick = () => {
-    const el = document.getElementById("about");
+    const el = document.getElementById("projects");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleMeetClick = () => {
-    const el = document.getElementById("maayon");
+    const el = document.getElementById("leadership");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     }
@@ -102,7 +103,10 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07111F] text-slate-100 selection:bg-[#D7B65A]/30 selection:text-[#E8D89A] flex flex-col">
+    <div className="min-h-screen bg-[#F7F8FA] dark:bg-[#040812] text-slate-900 dark:text-white selection:bg-[#D7B65A]/30 selection:text-[#B89432] dark:selection:text-[#E8D89A] flex flex-col relative transition-colors duration-500">
+      {/* 6-Layer Cinematic Animated Background System */}
+      <CinematicBackground />
+
       {/* Skip to Main Content for Screen Readers and Keyboard Navigation */}
       <a
         href="#main-content"
@@ -151,7 +155,7 @@ export function App() {
         {/* 13-Year Historical Timeline */}
         <Journey />
 
-        {/* Verified Board of Directors & Team MAAYON */}
+        {/* Team LIA Board of Directors */}
         <Leadership />
 
         {/* High-res Activity Gallery & Lightbox */}

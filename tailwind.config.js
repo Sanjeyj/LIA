@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -29,6 +30,10 @@ export default {
           accentAmber: "#F59E0B",
           accentRose: "#F43F5E",
           accentViolet: "#8B5CF6",
+          // TEAM LIA 2026–27 identity tokens
+          teamNavy: "#071A3D",
+          teamBlue: "#174EA6",
+          teamRoyal: "#2457D6",
         }
       },
       fontFamily: {

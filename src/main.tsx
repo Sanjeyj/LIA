@@ -5,6 +5,7 @@ import { MotionConfig } from 'framer-motion';
 import './index.css';
 import App from './App.tsx';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AnalyticsTracker } from './components/AnalyticsTracker';
 
@@ -24,7 +25,7 @@ const TeamPage = lazy(() => import('./components/TeamPage').then(m => ({ default
 const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 const RouteLoadingFallback = () => (
-  <div className="min-h-screen bg-[#07111F] flex items-center justify-center p-4">
+  <div className="min-h-screen bg-[var(--lia-bg)] flex items-center justify-center p-4">
     <div className="w-8 h-8 rounded-full border-2 border-[#D7B65A]/20 border-t-[#D7B65A] animate-spin" />
   </div>
 );
@@ -35,26 +36,28 @@ createRoot(document.getElementById('root')!).render(
       <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <AnalyticsTracker />
-          <AuthProvider>
-            <Suspense fallback={<RouteLoadingFallback />}>
-              <Routes>
-                <Route path="/admin/*" element={<AdminApp />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/careers/:slug" element={<CareerDetailPage />} />
-                <Route path="/events" element={<EventsPage />} />
-                <Route path="/events/:slug" element={<EventDetailPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-                <Route path="/gallery" element={<GalleryPage />} />
-                <Route path="/posts" element={<PostsPage />} />
-                <Route path="/posts/:slug" element={<PostDetailPage />} />
-                <Route path="/impact" element={<ImpactPage />} />
-                <Route path="/team" element={<TeamPage />} />
-                <Route path="/" element={<App />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <Routes>
+                  <Route path="/admin/*" element={<AdminApp />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/careers/:slug" element={<CareerDetailPage />} />
+                  <Route path="/events" element={<EventsPage />} />
+                  <Route path="/events/:slug" element={<EventDetailPage />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+                  <Route path="/gallery" element={<GalleryPage />} />
+                  <Route path="/posts" element={<PostsPage />} />
+                  <Route path="/posts/:slug" element={<PostDetailPage />} />
+                  <Route path="/impact" element={<ImpactPage />} />
+                  <Route path="/team" element={<TeamPage />} />
+                  <Route path="/" element={<App />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            </AuthProvider>
+          </ThemeProvider>
         </BrowserRouter>
       </MotionConfig>
     </ErrorBoundary>

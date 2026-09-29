@@ -298,7 +298,7 @@ export const EventsPage: React.FC = () => {
   const featuredEvent = eventsList.find((e) => e.featured) || eventsList[0];
 
   return (
-    <div className="min-h-screen bg-[#07111F] text-slate-100 selection:bg-[#D7B65A]/30 selection:text-[#E8D89A] flex flex-col">
+    <div className="min-h-screen bg-[var(--lia-bg)] text-slate-900 dark:text-slate-100 selection:bg-[#D7B65A]/30 selection:text-[#B89432] dark:selection:text-[#E8D89A] flex flex-col">
       <SEO
         title="Events & Initiatives — Rotaract Club of Lead India Ahead"
         description="Explore verified installations, district youth leadership seminars, youth sports cups, and public health initiatives organized and supported by Rotaract LIA."

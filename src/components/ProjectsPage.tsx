@@ -123,7 +123,7 @@ export const ProjectsPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#07111F] text-slate-100 selection:bg-[#D7B65A]/30 selection:text-[#E8D89A] flex flex-col">
+    <div className="min-h-screen bg-[var(--lia-bg)] text-slate-900 dark:text-slate-100 selection:bg-[#D7B65A]/30 selection:text-[#B89432] dark:selection:text-[#E8D89A] flex flex-col">
       <SEO
         title="Signature Projects — Rotaract Club of Lead India Ahead"
         description="Discover verified signature projects and sustained community initiatives of the Rotaract Club of Lead India Ahead, empowering youth and communities across Coimbatore."

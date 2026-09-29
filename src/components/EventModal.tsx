@@ -21,6 +21,18 @@ export const EventModal = ({ event, onClose }: EventModalProps) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+  // Lock body scroll when modal is active
+  useEffect(() => {
+    if (event) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [event]);
+
   if (!event) return null;
 
   const roleBadges: Record<string, { label: string; color: string }> = {
@@ -53,7 +65,7 @@ export const EventModal = ({ event, onClose }: EventModalProps) => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="event-modal-title"
-          className="relative w-full max-w-3xl glass-panel rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl z-10 max-h-[92vh] flex flex-col"
+          className="relative w-full max-w-3xl glass-floating backdrop-blur-2xl rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl z-10 max-h-[92vh] flex flex-col"
         >
           {/* Close button */}
           <button

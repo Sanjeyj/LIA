@@ -164,13 +164,13 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onOpen }) => {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3, delay: Math.min(idx * 0.04, 0.3) }}
             onClick={() => onOpen(idx)}
-            className={`group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 ${isLarge ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]"}`}
+            className={`group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 bg-[#07111F] ${isLarge ? "sm:col-span-2 aspect-[16/9]" : "aspect-[16/9]"}`}
           >
             <img
               src={photo.image_url}
               alt={photo.title ?? "Gallery photo"}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07111F] via-[#07111F]/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
             <div className="absolute top-3 left-3">
@@ -267,7 +267,7 @@ export const GalleryPage = () => {
         canonicalPath="/gallery"
         ogType="website"
       />
-      <div className="min-h-screen bg-[#07111F] text-white">
+      <div className="min-h-screen bg-[var(--lia-bg)] text-slate-900 dark:text-white">
         <section className="relative pt-28 pb-10 sm:pt-36 sm:pb-14 overflow-hidden border-b border-white/5">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-[#D7B65A]/5 rounded-full blur-3xl pointer-events-none" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -344,7 +344,7 @@ export const GalleryPage = () => {
               <>
                 {albums.length === 0 ? (
                   <div>
-                    <p className="text-slate-400 text-sm mb-8">Albums coming soon. Browse all photos below.</p>
+                    <p className="text-slate-400 text-sm mb-8">Browse all curated event and project photographs below.</p>
                     <PhotoGrid photos={allPhotos} onOpen={openLightboxForAll} />
                   </div>
                 ) : (
@@ -358,10 +358,10 @@ export const GalleryPage = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.35 }}
                           onClick={() => setSelectedAlbumId(album.id)}
-                          className="group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 aspect-[4/3]"
+                          className="group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 aspect-[16/9] bg-[#07111F]"
                         >
                           {cover ? (
-                            <img src={cover} alt={album.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <img src={cover} alt={album.name} loading="lazy" className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#10233D] to-[#07111F] flex items-center justify-center">
                               <ImageIcon className="w-12 h-12 text-white/10" />
@@ -449,9 +449,9 @@ export const GalleryPage = () => {
                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto">
                   <ImageIcon className="w-8 h-8 text-slate-500" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-300">Gallery Coming Soon</h3>
+                <h3 className="text-lg font-semibold text-slate-300">No Photographs Match Your Filter</h3>
                 <p className="text-slate-500 text-sm max-w-sm mx-auto">
-                  We are curating our visual archive. Check back soon for photos from our events and projects.
+                  Select a different category above to explore our full photo archive.
                 </p>
                 <Link to="/" className="inline-flex items-center gap-2 mt-4 text-sm text-[#D7B65A] hover:underline">
                   <ArrowLeft className="w-4 h-4" />

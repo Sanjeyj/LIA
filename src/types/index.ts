@@ -10,7 +10,16 @@ export type ClubInfo = {
   sponsorClub: string;
   rotaryYear: string;
   currentTheme: string;
-  themeStatementPlaceholder: string;
+  /** @deprecated Use teamThemeStatement instead */
+  themeStatementPlaceholder?: string;
+  /** Annual team identity name, e.g. "TEAM LIA" */
+  teamTheme: string;
+  /** Short tagline for the annual team identity */
+  teamThemeTagline: string;
+  /** Full theme statement for editorial/hero display */
+  teamThemeStatement: string;
+  /** Extended vision paragraph for editorial sections */
+  teamThemeVision: string;
   president: {
     name: string;
     title: string;
@@ -90,8 +99,12 @@ export type TeamMember = {
   letterImage?: string;
   bio?: string;
   collegeOrCompany?: string;
+  department?: string;
   bloodGroup?: string;
   isExecutive?: boolean;
+  roleCategory?: 'PRESIDENT' | 'EXECUTIVE' | 'DIRECTOR' | 'PROJECT_LEAD' | 'MEMBER';
+  linkedin?: string;
+  instagram?: string;
 };
 
 export type Milestone = {

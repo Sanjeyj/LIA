@@ -6,6 +6,7 @@ import { EVENTS } from "../data/events";
 import type { Event } from "../types";
 import { EventModal } from "./EventModal";
 import { getPublishedEvents } from "../services/events";
+import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
   return {
@@ -78,26 +79,27 @@ export const Events = () => {
   const featuredEvent = eventsList.find((e) => e.featured && e.id.includes("the-one")) || eventsList.find((e) => e.featured) || eventsList[0];
 
   return (
-    <section id="events" className="py-24 bg-[#07111F] relative overflow-hidden border-t border-white/5">
+    <section id="events" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#D7B65A] uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
               <span>Verified Club Activities</span>
             </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
               EVENTS &amp; <span className="gold-gradient-text">INITIATIVES</span>
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <p className="max-w-md text-slate-400 text-sm sm:text-base font-normal">
+            <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
               Chronological records of verified club installations, district seminars, youth sports tournaments, and public health initiatives.
             </p>
             <Link
               to="/events"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-[#D7B65A] border border-[#D7B65A]/30 shrink-0 transition-colors"
+              className="btn-liquid-glass shrink-0 text-xs shadow-sm"
             >
               <span>Explore All</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -113,7 +115,7 @@ export const Events = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             onClick={() => setSelectedEvent(featuredEvent)}
-            className="mb-14 glass-card rounded-3xl overflow-hidden border border-[#D7B65A]/30 group cursor-pointer hover:shadow-2xl transition-all relative"
+            className="mb-14 glass-primary glass-card-hover glass-shine rounded-3xl overflow-hidden border border-[#D7B65A]/35 group cursor-pointer shadow-2xl transition-all relative"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
               <div className="lg:col-span-7 relative h-56 sm:h-72 lg:h-96 overflow-hidden">
@@ -123,12 +125,12 @@ export const Events = () => {
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#07111F]/90 via-[#07111F]/30 lg:via-transparent to-transparent lg:to-[#07111F]" />
+                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#050B14]/90 via-[#050B14]/30 lg:via-transparent to-transparent lg:to-[#050B14]" />
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                   <span className="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-[#D7B65A] text-[#07111F] shadow-lg">
                     Featured Installation
                   </span>
-                  <span className="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-[#07111F]/80 text-[#E8D89A] border border-[#D7B65A]/40 backdrop-blur-md">
+                  <span className="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider glass-floating text-[#E8D89A] border border-[#D7B65A]/40 backdrop-blur-md">
                     Rotary Year 2026–27
                   </span>
                 </div>
@@ -179,10 +181,10 @@ export const Events = () => {
               <button
                 key={f.value}
                 onClick={() => setActiveFilter(f.value)}
-                className={`px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all ${
                   activeFilter === f.value
-                    ? "bg-[#D7B65A] text-[#07111F] font-bold shadow-md shadow-[#D7B65A]/20"
-                    : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "btn-liquid-primary shadow-lg shadow-[#D7B65A]/25"
+                    : "glass-subtle text-slate-300 hover:text-white border border-white/10"
                 }`}
               >
                 {f.label}
@@ -217,7 +219,7 @@ export const Events = () => {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
                   onClick={() => setSelectedEvent(ev)}
-                  className="glass-card glass-card-hover rounded-2xl overflow-hidden border border-white/10 group cursor-pointer flex flex-col justify-between"
+                  className="glass-secondary glass-card-hover glass-shine rounded-2xl overflow-hidden border border-white/10 group cursor-pointer flex flex-col justify-between"
                 >
                   <div className="relative h-48 overflow-hidden">
                     <img
@@ -226,7 +228,7 @@ export const Events = () => {
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-transparent" />
                     
                     <div className="absolute top-3 left-3 flex gap-1.5">
                       <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border backdrop-blur-md ${roleStyles[ev.liaRole] || "text-white bg-white/10"}`}>
@@ -274,6 +276,7 @@ export const Events = () => {
           </AnimatePresence>
         </motion.div>
 
+        </SectionReveal>
       </div>
 
       {/* Event Details Dialog */}

@@ -5,6 +5,7 @@ import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Calendar, Maximize2, 
 import { GALLERY_ITEMS } from "../data/gallery";
 import type { GalleryItem } from "../types";
 import { getPublishedGalleryImages } from "../services/gallery";
+import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
   return {
@@ -45,6 +46,18 @@ export const Gallery = () => {
     return item.category === activeCategory;
   });
 
+  // Lock body scroll when lightbox is active
+  useEffect(() => {
+    if (selectedPhotoIndex !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedPhotoIndex]);
+
   // Lightbox keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,17 +80,18 @@ export const Gallery = () => {
   }, [selectedPhotoIndex, filteredItems.length]);
 
   return (
-    <section id="gallery" className="py-24 bg-[#0B1728] relative overflow-hidden border-t border-white/5">
+    <section id="gallery" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionReveal>
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#D7B65A] uppercase tracking-wider mb-3">
-              <ImageIcon className="w-3.5 h-3.5 text-[#D7B65A]" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
+              <ImageIcon className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A]" />
               <span>Visual Chronicle</span>
             </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
               COMMUNITY <span className="gold-gradient-text">GALLERY</span>
             </h2>
           </div>
@@ -88,10 +102,10 @@ export const Gallery = () => {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all ${
                   activeCategory === cat
-                    ? "bg-[#D7B65A] text-[#07111F] shadow-lg shadow-[#D7B65A]/20"
-                    : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "btn-liquid-primary shadow-lg shadow-[#D7B65A]/25"
+                    : "glass-subtle text-slate-300 hover:text-white border border-white/10"
                 }`}
               >
                 {cat}
@@ -116,21 +130,21 @@ export const Gallery = () => {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
                   onClick={() => setSelectedPhotoIndex(idx)}
-                  className={`group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl transition-all ${
-                    isLarge ? "sm:col-span-2 lg:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
+                  className={`group relative rounded-2xl overflow-hidden glass-secondary glass-card-hover glass-shine border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl transition-all bg-[#07111F] ${
+                    isLarge ? "sm:col-span-2 lg:col-span-2 aspect-[16/9]" : "aspect-[16/9]"
                   }`}
                 >
                   <img
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#07111F] via-[#07111F]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
 
                   {/* Top Category Badge */}
                   <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-                    <span className="px-2 sm:px-2.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#07111F]/80 text-[#D7B65A] border border-[#D7B65A]/30 backdrop-blur-md">
+                    <span className="px-2 sm:px-2.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider glass-floating text-[#D7B65A] border border-[#D7B65A]/30 backdrop-blur-md">
                       {item.category}
                     </span>
                   </div>
@@ -165,13 +179,14 @@ export const Gallery = () => {
         <div className="mt-12 text-center">
           <Link
             to="/gallery"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-[#07111F] bg-gradient-to-r from-[#D7B65A] via-[#E8D89A] to-[#D7B65A] hover:shadow-lg hover:shadow-[#D7B65A]/25 transition-all duration-300 group"
+            className="btn-liquid-primary inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-[#07111F] group shadow-xl"
           >
-            <span>Explore Complete Visual Archive & Albums</span>
+            <span>Explore Complete Visual Archive &amp; Albums</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
+        </SectionReveal>
       </div>
 
       {/* Fullscreen Lightbox */}
@@ -183,7 +198,7 @@ export const Gallery = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedPhotoIndex(null)}
-              className="fixed inset-0 bg-black/90 backdrop-blur-lg"
+              className="fixed inset-0 bg-black/90 backdrop-blur-xl"
             />
 
             {/* Controls */}

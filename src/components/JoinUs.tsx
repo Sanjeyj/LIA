@@ -248,7 +248,7 @@ export const JoinUs = ({ isModalOpen, onCloseModal, onOpenModal }: JoinUsProps) 
                     Thank You, {formData.name || "Friend"}!
                   </h3>
                   <p className="text-sm text-slate-300 max-w-md mx-auto">
-                    Your expression of interest has been received. Team MAAYON 2026–27 welcomes your passion and will connect with you soon!
+                    Your expression of interest has been received. Team LIA 2026–27 welcomes your passion and will connect with you soon!
                   </p>
                   <button
                     onClick={() => {

@@ -47,7 +47,7 @@ export const SettingsManager: React.FC = () => {
     sponsor_club: 'Rotary Club of Coimbatore Texcity',
     email: 'racleadindiaahead2021@gmail.com',
     phone_primary: '+91 63697 98451',
-    phone_secondary: '+91 75027 97780',
+    phone_secondary: '+91 93458 72409',
     instagram_handle: '@rotaract.clubof.lia',
     instagram_url: 'https://www.instagram.com/rotaract.clubof.lia/',
     linkedin_url: 'https://www.linkedin.com/company/rotaract-club-of-lead-india-ahead/',

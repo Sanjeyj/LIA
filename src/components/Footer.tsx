@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { ArrowUp, Mail, Phone, MapPin, Shield, Compass, Sparkles } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
+import { MemberAvatar } from "./MemberAvatar";
 
 const InstagramIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -27,10 +28,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
   const isHomepage = location.pathname === "/";
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const navItems = [
@@ -42,50 +40,79 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
     { label: "Events & Timeline", targetId: "events" },
     { label: "Careers & Opportunities", path: "/careers" },
     { label: "Our Journey", targetId: "journey" },
-    { label: "Leadership Board", targetId: "leadership" },
+    { label: "Team LIA", targetId: "leadership" },
     { label: "Photo Gallery", targetId: "gallery" },
     { label: "Contact Us", targetId: "contact" },
   ];
 
   return (
-    <footer className="bg-[#050D18] text-slate-300 relative overflow-hidden border-t border-white/10">
-      {/* Subtle background aura */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-48 bg-[#D7B65A]/5 rounded-full blur-[100px] pointer-events-none" />
-
+    <footer className="bg-slate-100/80 dark:bg-[#03070E] text-slate-700 dark:text-slate-300 relative overflow-hidden border-t border-slate-200/80 dark:border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-12 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-12 pb-12 sm:pb-16 border-b border-white/10">
-          {/* Column 1: Dual Brand & Bio */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-12 pb-12 sm:pb-16 border-b border-slate-200/80 dark:border-white/10">
+
+          {/* Column 1: TEAM LIA Brand Identity */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-5 sm:space-y-6">
             <div className="flex items-center space-x-3.5">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#10233D] to-[#07111F] border border-[#D7B65A]/40 flex items-center justify-center shadow-lg shadow-black/40 overflow-hidden p-1 shrink-0">
                 <img
                   src="/assets/logos/lia-shield.png"
-                  alt="Rotaract Club of Lead India Ahead Official Shield Crest"
+                  alt="Rotaract Club of Lead India Ahead official shield crest"
                   className="w-full h-full object-contain"
                 />
               </div>
               <div>
-                <span className="font-heading font-extrabold text-sm sm:text-base tracking-wider text-white uppercase block leading-tight">
-                  ROTARACT CLUB OF
-                </span>
                 <span className="font-heading font-black text-lg sm:text-xl text-[#D7B65A] tracking-wider block">
-                  LEAD INDIA AHEAD
+                  TEAM LIA
+                </span>
+                <span className="font-heading font-extrabold text-sm sm:text-base tracking-wider text-white uppercase block leading-tight">
+                  ROTARACT CLUB OF LEAD INDIA AHEAD
                 </span>
               </div>
             </div>
 
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Chartered in 2012 under the Rotary Club of Coimbatore Texcity, Rotaract District 3206. We empower dynamic youth, cultivate future leaders, and spearhead transformational social initiatives across Tamil Nadu.
+            {/* Official tagline — centralized data */}
+            <div className="p-4 rounded-xl glass-secondary border border-[#D7B65A]/25 glass-shine">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Our Theme</p>
+              <p className="text-sm font-heading font-bold text-white leading-snug italic">
+                "{CLUB_INFO.teamThemeTagline}"
+              </p>
+              <p className="text-xs text-[#D7B65A] mt-1.5 font-semibold">Rotary Year 2026–27</p>
+            </div>
+
+            <p className="text-slate-400 text-sm leading-relaxed font-normal">
+              Chartered in 2012 under the Rotary Club of Coimbatore Texcity, Rotaract District 3206.
+              We empower dynamic youth, cultivate future leaders, and spearhead transformational social
+              initiatives across Tamil Nadu.
             </p>
 
-            <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex items-center space-x-3.5">
-              <div className="w-9 h-9 rounded-lg bg-[#D7B65A]/15 border border-[#D7B65A]/30 flex items-center justify-center shrink-0">
-                <Sparkles className="w-4 h-4 text-[#D7B65A]" />
+            {/* Annual identity + presidential theme distinction */}
+            <div className="space-y-2">
+              <div className="p-3 rounded-xl glass-subtle border border-white/10 flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-lg bg-[#D7B65A]/10 border border-[#D7B65A]/25 flex items-center justify-center shrink-0">
+                  <Shield className="w-4 h-4 text-[#D7B65A]" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold">Annual Identity</p>
+                  <p className="text-sm font-heading font-bold text-white">TEAM LIA 2026–27</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold">Presidential Theme</p>
-                <p className="text-sm font-heading font-bold text-white tracking-wide">MAAYON 2026–27</p>
-                <p className="text-xs text-[#D7B65A]">President Rtr. Hariharan B</p>
+              <div className="p-3 rounded-xl glass-subtle border border-white/10 flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-lg bg-white/95 border border-[#D7B65A]/40 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-md">
+                  <img src="/assets/logos/maayon-theme.png" alt="MAAYON theme" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold">Presidential Theme</p>
+                  <p className="text-sm font-heading font-bold text-white">MAAYON 2026–27</p>
+                  <div className="flex items-center space-x-1.5 mt-1">
+                    <MemberAvatar
+                      src="/assets/members/hariharan.jpg"
+                      name={CLUB_INFO.president.name}
+                      size="sm"
+                      className="w-4 h-4 rounded-full shrink-0 border border-[#D7B65A]/40"
+                    />
+                    <span className="text-xs text-[#D7B65A] font-semibold">{CLUB_INFO.president.name}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -93,7 +120,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
           {/* Column 2: Navigation Links */}
           <div className="lg:col-span-3 space-y-4">
             <h3 className="font-heading font-bold text-sm uppercase tracking-wider text-white flex items-center space-x-2">
-              <Compass className="w-4 h-4 text-[#D7B65A]" />
+              <Compass className="w-4 h-4 text-[#D7B65A]" aria-hidden="true" />
               <span>Explore</span>
             </h3>
             <ul className="grid grid-cols-2 gap-2.5 text-sm text-slate-400">
@@ -118,10 +145,10 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
             </ul>
           </div>
 
-          {/* Column 3: The Four-Way Test */}
+          {/* Column 3: Guiding Principles */}
           <div className="lg:col-span-2 space-y-4">
             <h3 className="font-heading font-bold text-sm uppercase tracking-wider text-white flex items-center space-x-2">
-              <Shield className="w-4 h-4 text-[#D7B65A]" />
+              <Sparkles className="w-4 h-4 text-[#D7B65A]" aria-hidden="true" />
               <span>Guiding Principles</span>
             </h3>
             <div className="space-y-2 text-xs text-slate-400 leading-snug">
@@ -138,18 +165,18 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
             </div>
           </div>
 
-          {/* Column 4: Official Contact & Connect */}
+          {/* Column 4: Contact */}
           <div className="lg:col-span-3 space-y-4">
             <h3 className="font-heading font-bold text-sm uppercase tracking-wider text-white">
               Official Headquarters
             </h3>
             <div className="space-y-3 text-sm text-slate-400">
               <div className="flex items-start space-x-3">
-                <MapPin className="w-4 h-4 text-[#D7B65A] shrink-0 mt-1" />
+                <MapPin className="w-4 h-4 text-[#D7B65A] shrink-0 mt-1" aria-hidden="true" />
                 <span>{CLUB_INFO.location}</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="w-4 h-4 text-[#D7B65A] shrink-0" />
+                <Mail className="w-4 h-4 text-[#D7B65A] shrink-0" aria-hidden="true" />
                 <a
                   href={`mailto:${CLUB_INFO.contact.email}`}
                   className="hover:text-white transition-colors truncate"
@@ -158,7 +185,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
                 </a>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="w-4 h-4 text-[#D7B65A] shrink-0" />
+                <Phone className="w-4 h-4 text-[#D7B65A] shrink-0" aria-hidden="true" />
                 <span>{CLUB_INFO.contact.phones[0]}</span>
               </div>
             </div>
@@ -195,7 +222,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Scroll to Top */}
+        {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-center sm:text-left">
             <span>
@@ -213,7 +240,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
             aria-label="Back to top"
           >
             <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </div>
       </div>

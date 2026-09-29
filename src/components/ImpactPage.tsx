@@ -97,7 +97,7 @@ export const ImpactPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#07111F] text-slate-100 flex flex-col font-body antialiased selection:bg-[#D7B65A]/30 selection:text-[#E8D89A]">
+    <div className="min-h-screen bg-[var(--lia-bg)] text-slate-900 dark:text-slate-100 flex flex-col font-body antialiased selection:bg-[#D7B65A]/30 selection:text-[#B89432] dark:selection:text-[#E8D89A]">
       <SEO
         title="Impact & Milestones | Rotaract Club of Lead India Ahead"
         description="Explore verified community impact, signature initiatives, and historical milestones of the Rotaract Club of Lead India Ahead (District 3206, Coimbatore)."

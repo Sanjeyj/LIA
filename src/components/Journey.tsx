@@ -2,26 +2,28 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChevronRight, ChevronLeft, Award } from "lucide-react";
 import { MILESTONES } from "../data/journey";
+import { SectionReveal } from "./SectionReveal";
 
 export const Journey: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="journey" className="py-24 bg-[#0B1728] relative overflow-hidden border-t border-white/5">
+    <section id="journey" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#D7B65A] uppercase tracking-wider mb-3">
-              <Clock className="w-3.5 h-3.5 text-[#D7B65A]" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
+              <Clock className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A]" />
               <span>Institutional Evolution</span>
             </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
               OUR <span className="gold-gradient-text">JOURNEY</span>
             </h2>
           </div>
-          <p className="max-w-md text-slate-400 text-sm sm:text-base mt-4 md:mt-0 font-normal">
+          <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base mt-4 md:mt-0 font-normal">
             From our founding in 2012 under Rotary Club of Coimbatore Texcity to the dynamic MAAYON chapter of 2026–27.
           </p>
         </div>
@@ -79,7 +81,7 @@ export const Journey: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.35 }}
-              className="glass-card rounded-3xl p-8 sm:p-10 border border-white/15 shadow-2xl relative overflow-hidden"
+              className="glass-primary glass-shine rounded-3xl p-8 sm:p-10 border border-white/15 shadow-2xl relative overflow-hidden"
             >
               <div className="grid grid-cols-12 gap-8 items-center">
                 <div className="col-span-8 space-y-4">
@@ -155,7 +157,7 @@ export const Journey: React.FC = () => {
             >
               <div className="absolute left-2.5 sm:left-3.5 top-3 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#D7B65A] border-2 sm:border-4 border-[#07111F] -translate-x-1/2 shadow" />
               
-              <div className="glass-card p-4 sm:p-6 rounded-2xl border border-white/10 space-y-2">
+              <div className="glass-secondary p-4 sm:p-6 rounded-2xl border border-white/10 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-heading font-bold text-[#E8D89A] text-sm sm:text-base">{m.year}</span>
                   <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] uppercase font-semibold bg-white/5 text-slate-400">
@@ -169,6 +171,7 @@ export const Journey: React.FC = () => {
           ))}
         </div>
 
+        </SectionReveal>
       </div>
     </section>
   );

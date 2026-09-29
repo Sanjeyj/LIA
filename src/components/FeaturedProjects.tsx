@@ -5,6 +5,7 @@ import { ArrowUpRight, Calendar, X, ShieldCheck, ExternalLink } from "lucide-rea
 import { PROJECTS } from "../data/projects";
 import type { Project } from "../types";
 import { getPublishedProjects } from "../services/projects";
+import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
   return {
@@ -60,6 +61,18 @@ export const FeaturedProjects = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject]);
 
+  // Lock body scroll when modal is active
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedProject]);
+
   // Asymmetric arrangement:
   const heroProject = projectsList[0] || PROJECTS[0];
   const sideProject1 = projectsList[1] || PROJECTS[1];
@@ -67,26 +80,27 @@ export const FeaturedProjects = () => {
   const wideProject = projectsList[3] || PROJECTS[3];
 
   return (
-    <section id="projects" className="py-24 bg-[#0B1728] relative overflow-hidden">
+    <section id="projects" className="py-24 sm:py-32 scroll-mt-28 sm:scroll-mt-36 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#D7B65A] uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
               <span>Impact in Action</span>
             </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
               FEATURED <span className="gold-gradient-text">PROJECTS</span>
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <p className="max-w-md text-slate-400 text-sm sm:text-base font-normal">
+            <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
               Asymmetric showcase of verified community-led programs, sports development, public healthcare, and youth initiatives.
             </p>
             <Link
               to="/projects"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-[#D7B65A] border border-[#D7B65A]/30 shrink-0 transition-colors"
+              className="btn-liquid-glass shrink-0 text-xs shadow-sm"
             >
               <span>Explore All</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -105,7 +119,7 @@ export const FeaturedProjects = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               onClick={() => setSelectedProject(heroProject)}
-              className="lg:col-span-7 glass-card rounded-2xl overflow-hidden border border-white/10 group cursor-pointer flex flex-col justify-between transition-all hover:border-[#D7B65A]/40 hover:shadow-2xl"
+              className="lg:col-span-7 glass-primary glass-card-hover glass-shine rounded-2xl overflow-hidden border border-white/12 group cursor-pointer flex flex-col justify-between transition-all hover:border-[#D7B65A]/40 shadow-2xl"
             >
               <div className="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
                 <img
@@ -114,9 +128,9 @@ export const FeaturedProjects = () => {
                   loading="lazy"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-[#0B1728]/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent" />
                 <div className="absolute top-4 left-4 flex items-center space-x-2">
-                  <span className="px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#07111F]/80 text-[#10B981] border border-[#10B981]/30 backdrop-blur-md">
+                  <span className="px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider glass-floating text-[#10B981] border border-[#10B981]/30 backdrop-blur-md">
                     Featured Initiative
                   </span>
                 </div>
@@ -176,7 +190,7 @@ export const FeaturedProjects = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
                   onClick={() => setSelectedProject(proj)}
-                  className="glass-card rounded-2xl overflow-hidden border border-white/10 group cursor-pointer flex-1 flex flex-col justify-between hover:border-white/20 transition-all hover:shadow-xl"
+                  className="glass-secondary glass-card-hover glass-shine rounded-2xl overflow-hidden border border-white/10 group cursor-pointer flex-1 flex flex-col justify-between transition-all hover:shadow-xl"
                 >
                   <div className="relative h-44 sm:h-48 overflow-hidden">
                     <img
@@ -185,9 +199,9 @@ export const FeaturedProjects = () => {
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-[#0B1728]/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/20 to-transparent" />
                     <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#07111F]/80 text-[#D7B65A] border border-[#D7B65A]/30 backdrop-blur-md">
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider glass-floating text-[#D7B65A] border border-[#D7B65A]/30 backdrop-blur-md">
                         {proj.category}
                       </span>
                     </div>
@@ -224,7 +238,7 @@ export const FeaturedProjects = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               onClick={() => setSelectedProject(wideProject)}
-              className="lg:col-span-12 glass-card rounded-2xl overflow-hidden border border-white/10 group cursor-pointer hover:border-[#EC4899]/40 transition-all hover:shadow-2xl"
+              className="lg:col-span-12 glass-primary glass-card-hover glass-shine rounded-2xl overflow-hidden border border-white/12 group cursor-pointer hover:border-[#EC4899]/40 transition-all shadow-2xl"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                 <div className="lg:col-span-6 relative h-64 lg:h-80 overflow-hidden">
@@ -234,7 +248,7 @@ export const FeaturedProjects = () => {
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent to-[#0B1728]/70" />
+                  <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent to-[#050B14]/70" />
                 </div>
 
                 <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 space-y-4">
@@ -266,7 +280,7 @@ export const FeaturedProjects = () => {
                   )}
 
                   <div className="pt-4 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-white">
-                    <span>Read Full Story & Outcomes</span>
+                    <span>Read Full Story &amp; Outcomes</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -275,6 +289,7 @@ export const FeaturedProjects = () => {
           )}
 
         </div>
+        </SectionReveal>
       </div>
 
       {/* Project Detail Modal */}
@@ -299,7 +314,7 @@ export const FeaturedProjects = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-3xl glass-panel rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl z-10 max-h-[92vh] flex flex-col"
+              className="relative w-full max-w-3xl glass-floating backdrop-blur-2xl rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl z-10 max-h-[92vh] flex flex-col"
             >
               {/* Close button */}
               <button

@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" width="100%" height="100%">
+  <defs>
+    <!-- 3D Metallic Sapphire Navy Gradients -->
+    <linearGradient id="maayon3dBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1B497D" />
+      <stop offset="30%" stop-color="#0E2D53" />
+      <stop offset="70%" stop-color="#081C36" />
+      <stop offset="100%" stop-color="#040E1E" />
+    </linearGradient>
+
+    <linearGradient id="maayon3dBlueHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4A90E2" />
+      <stop offset="50%" stop-color="#1B497D" />
+      <stop offset="100%" stop-color="#0B223F" />
+    </linearGradient>
+
+    <!-- 3D Metallic Gold Rotary Wheel Gradients -->
+    <linearGradient id="rotaryGold3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="25%" stop-color="#D7B65A" />
+      <stop offset="50%" stop-color="#B89432" />
+      <stop offset="75%" stop-color="#E5C158" />
+      <stop offset="100%" stop-color="#8C6D1F" />
+    </linearGradient>
+
+    <linearGradient id="goldBezel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3C4" />
+      <stop offset="50%" stop-color="#D7B65A" />
+      <stop offset="100%" stop-color="#7A5E13" />
+    </linearGradient>
+
+    <!-- Peacock Feather Gradients -->
+    <linearGradient id="peacockBlue" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#071A3D" />
+      <stop offset="40%" stop-color="#0066B2" />
+      <stop offset="80%" stop-color="#00B4D8" />
+      <stop offset="100%" stop-color="#90E0EF" />
+    </linearGradient>
+
+    <linearGradient id="peacockGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="60%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="logoShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#040A14" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <g filter="url(#logoShadow)">
+    <!-- ── PEACOCK FEATHER MOTIF OVER FIRST 'A' ── -->
+    <g transform="translate(262, 10)">
+      <!-- Outer Feather Crown -->
+      <path d="M 50,85 C 25,65 10,38 32,10 C 50,-12 85,4 72,40 C 65,58 55,75 50,85 Z" fill="url(#peacockBlue)" />
+      <!-- Inner Feather Layer -->
+      <path d="M 50,85 C 32,68 20,44 38,20 C 52,2 78,16 66,45 C 60,60 53,75 50,85 Z" fill="url(#peacockGreen)" opacity="0.85" />
+      <!-- Feather Rib Stem -->
+      <path d="M 50,85 C 43,55 38,28 35,6" fill="none" stroke="url(#rotaryGold3d)" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Peacock Eye Core -->
+      <ellipse cx="36" cy="24" rx="12" ry="9" fill="#071A3D" transform="rotate(-18 36 24)" />
+      <ellipse cx="36" cy="24" rx="8" ry="6" fill="url(#peacockBlue)" transform="rotate(-18 36 24)" />
+      <circle cx="33" cy="21" r="2.5" fill="#FFFFFF" />
+      <!-- Gold Feather Highlights -->
+      <path d="M 40,45 C 25,35 15,38 8,46 M 42,35 C 28,20 18,22 10,32" fill="none" stroke="url(#rotaryGold3d)" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M 45,50 C 60,38 70,42 78,50 M 44,38 C 60,24 68,28 76,38" fill="none" stroke="url(#rotaryGold3d)" stroke-width="1.5" stroke-linecap="round" />
+    </g>
+
+    <!-- ── MAAYON LOGOTYPE ── -->
+    <!-- M -->
+    <path d="M 40,165 L 40,65 L 70,65 L 98,125 L 126,65 L 156,65 L 156,165 L 128,165 L 128,105 L 105,152 L 91,152 L 68,105 L 68,165 Z" fill="url(#maayon3dBlue)" stroke="#061324" stroke-width="1.5" />
+    <!-- M 3D Highlight Edge -->
+    <path d="M 40,65 L 70,65 L 98,125 L 126,65 L 156,65" fill="none" stroke="url(#maayon3dBlueHighlight)" stroke-width="2" />
+
+    <!-- A1 + Y Infinity Loop Outer Ring -->
+    <!-- A1 Left Stem -->
+    <path d="M 168,165 L 210,65 L 238,65 L 280,165 L 252,165 L 243,140 L 205,140 L 196,165 Z M 213,117 L 235,117 L 224,90 Z" fill="url(#maayon3dBlue)" stroke="#061324" stroke-width="1.5" />
+
+    <!-- Infinity Loop connecting A1 and A2/Y -->
+    <path d="M 224,140 C 260,185 320,185 356,140 C 392,95 452,95 488,140 C 452,185 392,185 356,140 C 320,95 260,95 224,140 Z" fill="none" stroke="url(#maayon3dBlue)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 224,140 C 260,185 320,185 356,140 C 392,95 452,95 488,140 C 452,185 392,185 356,140 C 320,95 260,95 224,140 Z" fill="none" stroke="url(#maayon3dBlueHighlight)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- A2 -->
+    <path d="M 288,165 L 330,65 L 358,65 L 400,165 L 372,165 L 363,140 L 325,140 L 316,165 Z M 333,117 L 355,117 L 344,90 Z" fill="url(#maayon3dBlue)" stroke="#061324" stroke-width="1.5" />
+
+    <!-- Y -->
+    <path d="M 408,65 L 438,65 L 460,110 L 482,65 L 512,65 L 474,128 L 474,165 L 446,165 L 446,128 Z" fill="url(#maayon3dBlue)" stroke="#061324" stroke-width="1.5" />
+
+    <!-- ── O (3D METALLIC GOLD ROTARY WHEEL) ── -->
+    <g transform="translate(562, 115)">
+      <!-- Outer Gear Teeth (24 Teeth) -->
+      <circle cx="0" cy="0" r="48" fill="url(#rotaryGold3d)" stroke="#7A5E13" stroke-width="2" />
+      <!-- Gear Cog Inset Teeth -->
+      <g stroke="#7A5E13" stroke-width="2" fill="url(#rotaryGold3d)">
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(30)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(60)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(90)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(120)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(150)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(180)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(210)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(240)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(270)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(300)" />
+        <path d="M -6,-52 L 6,-52 L 5,-45 L -5,-45 Z" transform="rotate(330)" />
+      </g>
+      <!-- Outer Wheel Bezel Ring -->
+      <circle cx="0" cy="0" r="44" fill="none" stroke="url(#goldBezel)" stroke-width="4" />
+      <circle cx="0" cy="0" r="38" fill="#061324" stroke="url(#rotaryGold3d)" stroke-width="2" />
+      <circle cx="0" cy="0" r="30" fill="none" stroke="url(#rotaryGold3d)" stroke-width="3" />
+      <!-- 6 Rotary Wheel Spokes -->
+      <g stroke="url(#rotaryGold3d)" stroke-width="5" stroke-linecap="round">
+        <line x1="0" y1="-30" x2="0" y2="30" />
+        <line x1="-26" y1="-15" x2="26" y2="15" />
+        <line x1="-26" y1="15" x2="26" y2="-15" />
+      </g>
+      <!-- Center Hub -->
+      <circle cx="0" cy="0" r="14" fill="url(#rotaryGold3d)" stroke="#7A5E13" stroke-width="1.5" />
+      <circle cx="0" cy="0" r="8" fill="#061324" />
+      <circle cx="0" cy="0" r="4" fill="url(#goldBezel)" />
+    </g>
+
+    <!-- N -->
+    <path d="M 628,165 L 628,65 L 656,65 L 708,136 L 708,65 L 736,65 L 736,165 L 708,165 L 656,94 L 656,165 Z" fill="url(#maayon3dBlue)" stroke="#061324" stroke-width="1.5" />
+    <path d="M 628,65 L 656,65 L 708,136 L 736,165" fill="none" stroke="url(#maayon3dBlueHighlight)" stroke-width="2" />
+
+    <!-- ── DIVIDER RULES WITH METALLIC GOLD TRIM ── -->
+    <line x1="40" y1="185" x2="760" y2="185" stroke="url(#rotaryGold3d)" stroke-width="2.5" />
+    <line x1="40" y1="265" x2="760" y2="265" stroke="url(#rotaryGold3d)" stroke-width="2.5" />
+
+    <!-- ── OFFICIAL SUBTEXT TYPOGRAPHY ── -->
+    <!-- Line 1: President Name & Year -->
+    <text x="400" y="222" text-anchor="middle" font-family="'Space Grotesk', 'Inter', sans-serif" font-weight="800" font-size="20" fill="#081C36" letter-spacing="1">
+      Rtr. Hariharan B - <tspan font-style="italic" font-weight="700">PRESIDENT (26-27)</tspan>
+    </text>
+
+    <!-- Line 2: Club Title -->
+    <text x="400" y="252" text-anchor="middle" font-family="'Space Grotesk', 'Inter', sans-serif" font-weight="800" font-size="18" fill="#081C36" letter-spacing="1.5">
+      Rotaract Club of LIA (Lead India Ahead)
+    </text>
+  </g>
+</svg>

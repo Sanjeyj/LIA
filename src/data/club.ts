@@ -12,14 +12,21 @@ export const CLUB_INFO: ClubInfo = {
   sponsorClub: "Rotary Club of Coimbatore Texcity",
   rotaryYear: "2026–27",
   currentTheme: "MAAYON",
-  themeStatementPlaceholder: "The official MAAYON theme statement will be added here.",
+
+  // Annual team identity for Rotary Year 2026–27
+  teamTheme: "TEAM LIA",
+  teamThemeTagline: "Together, We Lead. Together, We Serve. Together, We Grow.",
+  teamThemeStatement: "Together, We Lead. Together, We Serve. Together, We Grow.",
+  teamThemeVision:
+    "Team LIA represents a collective commitment to leadership, service, fellowship and meaningful growth. Throughout Rotary Year 2026–27, we strive to create purposeful impact, strengthen our community and grow together through service and leadership.",
+
   president: {
     name: "Rtr. Hariharan B",
     title: "President",
     term: "2026–27",
   },
   contact: {
-    phones: ["+91 63697 98451", "+91 75027 97780"],
+    phones: ["+91 63697 98451", "+91 93458 72409"],
     email: "racleadindiaahead2021@gmail.com",
     instagram: "@rotaract.clubof.lia",
     instagramUrl: "https://www.instagram.com/rotaract.clubof.lia/",
