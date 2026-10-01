@@ -21,7 +21,9 @@ function mapSupabaseProjectToPublicProject(dbProj: any): Project {
     year: dbProj.year || new Date().getFullYear(),
     description: dbProj.description || staticMatch?.description || "",
     shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || "",
-    image: dbProj.cover_image_url || staticMatch?.image || "/assets/events/football.jpg",
+    image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== "")
+      ? dbProj.cover_image_url
+      : (staticMatch?.image || "/assets/events/football.jpg"),
     featured: Boolean(dbProj.featured),
     impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
     collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
