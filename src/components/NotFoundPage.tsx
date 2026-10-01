@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Briefcase, ArrowLeft, Shield } from 'lucide-react';
+import { Home, Briefcase, ArrowLeft } from 'lucide-react';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';

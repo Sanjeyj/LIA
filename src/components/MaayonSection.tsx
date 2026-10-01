@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, Shield, Compass, Star, BookOpen } from "lucide-react";
+import { Shield, Compass, Star, BookOpen } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
 import { MemberAvatar } from "./MemberAvatar";
 import { Section, SectionHeading } from "./Section";

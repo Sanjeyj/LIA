@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
 import { InteractiveMaayonBg } from "./InteractiveMaayonBg";
 
@@ -52,7 +52,7 @@ export const Hero: React.FC<HeroProps> = ({
       y: 0,
       transition: {
         duration: shouldReduceMotion ? 0.1 : 0.6,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
       },
     },
   };
@@ -120,7 +120,7 @@ export const Hero: React.FC<HeroProps> = ({
           {/* 3. Short Sub-line: Club Name & Rotary Year */}
           <motion.div variants={itemVariants} className="mb-8">
             <p className="text-xs sm:text-sm md:text-base text-[#8E9DAE] font-medium tracking-wide flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[#F5F1E8] font-semibold">{CLUB_INFO.name}</span>
+              <span className="text-[#F5F1E8] font-semibold">{CLUB_INFO.clubName}</span>
               <span className="text-[#C9A961]">•</span>
               <span>Rotary Year 2026–27</span>
               <span className="text-[#C9A961]">•</span>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, FileText, X, GraduationCap, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, X, GraduationCap, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 import { TEAM_MEMBERS } from "../data/team";
 import type { TeamMember } from "../types";
 import { getPublishedTeamMembers } from "../services/team";

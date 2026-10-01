@@ -8,7 +8,6 @@ import {
   DollarSign,
   ArrowRight,
   ExternalLink,
-  Sparkles,
 } from 'lucide-react';
 import { getLatestOpportunities } from '../services/careers';
 import type { Career } from '../types/supabase';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Calendar, Maximize2, ArrowRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Calendar, Maximize2, ArrowRight } from "lucide-react";
 import { GALLERY_ITEMS } from "../data/gallery";
 import type { GalleryItem } from "../types";
 import { getPublishedGalleryImages } from "../services/gallery";

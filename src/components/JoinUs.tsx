@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle, Sparkles, X, Shield, Send } from "lucide-react";
+import { ArrowRight, CheckCircle, X, Shield, Send } from "lucide-react";
 import { Section, SectionHeading } from "./Section";
 
 interface JoinUsProps {

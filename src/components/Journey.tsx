@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, ChevronRight, ChevronLeft, Award } from "lucide-react";
+import { ChevronRight, ChevronLeft, Award } from "lucide-react";
 import { MILESTONES } from "../data/journey";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
