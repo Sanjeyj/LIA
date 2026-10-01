@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
+import { Section, SectionHeading } from "./Section";
 
 const InstagramIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -37,22 +38,17 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-[#07111F] relative overflow-hidden border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="max-w-3xl mb-16">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#D7B65A] uppercase tracking-wider mb-3">
-            <Mail className="w-3.5 h-3.5 text-[#D7B65A]" />
-            <span>Connect with Team LIA</span>
-          </div>
-          <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-            GET IN <span className="gold-gradient-text">TOUCH</span>
-          </h2>
-          <p className="text-slate-400 text-sm sm:text-base mt-3 font-normal">
-            For collaborative projects, district partnerships, institutional memberships, or community initiatives.
-          </p>
-        </div>
+    <Section id="contact" className="bg-[#07111F] border-t border-white/5">
+      {/* Header */}
+      <div className="max-w-3xl mb-16">
+        <SectionHeading
+          badge="Connect with Team LIA"
+          title="GET IN TOUCH"
+          subtitle="For collaborative projects, district partnerships, institutional memberships, or community initiatives."
+          centered={false}
+          className="mb-0"
+        />
+      </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
@@ -237,7 +233,6 @@ export const Contact = () => {
           </div>
 
         </div>
-      </div>
-    </section>
+    </Section>
   );
 };

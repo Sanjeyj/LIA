@@ -1,208 +1,167 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, Users, ChevronRight, Sparkles } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowDown, ArrowRight, Sparkles } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
-import { MemberAvatar } from "./MemberAvatar";
-import { LiquidGlassScene } from "./three/LiquidGlassScene";
 import { InteractiveMaayonBg } from "./InteractiveMaayonBg";
 
 interface HeroProps {
-  onExploreClick: () => void;
-  onMeetClick: () => void;
+  onExploreClick?: () => void;
+  onMeetClick?: () => void;
+  onOpenJoinModal?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExploreClick, onMeetClick }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onExploreClick,
+  onOpenJoinModal,
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  const handleJoinClick = () => {
+    if (onOpenJoinModal) {
+      onOpenJoinModal();
+    } else {
+      const el = document.getElementById("join");
+      el?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleProjectsClick = () => {
+    if (onExploreClick) {
+      onExploreClick();
+    } else {
+      const el = document.getElementById("projects");
+      el?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.18,
+        delayChildren: shouldReduceMotion ? 0 : 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center pt-28 sm:pt-36 pb-20 overflow-hidden"
+      className="relative min-h-[92vh] flex items-center justify-center pt-28 sm:pt-36 pb-20 bg-[#07111F] overflow-hidden"
     >
-      {/* Dynamic Mouse-Tracked Exact MAAYON Poster Image Background */}
-      <InteractiveMaayonBg opacity={0.25} scale={1.1} />
+      {/* 3-4% Opacity Noise Texture Overlay */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-[0.035] pointer-events-none mix-blend-overlay z-0"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
 
-      {/* Ambient background soft light glows */}
-      <div aria-hidden="true" className="dark:hidden absolute -top-20 -left-40 w-[600px] h-[600px] bg-gradient-to-tr from-[#EAF1FF]/60 via-white/80 to-[#FCFBF7]/50 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div aria-hidden="true" className="hidden dark:block absolute -top-20 -left-40 w-[600px] h-[600px] bg-gradient-to-tr from-[#174EA6]/20 via-[#07111F]/60 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div aria-hidden="true" className="absolute bottom-10 -right-40 w-[550px] h-[550px] bg-[#D7B65A]/12 dark:bg-[#D7B65A]/08 rounded-full blur-[110px] pointer-events-none -z-10" />
+      {/* Mouse-Tracked Interactive MAAYON Theme Flying Parallax Background */}
+      <InteractiveMaayonBg opacity={0.28} scale={1.15} />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 flex flex-col items-center w-full">
+      {/* Soft Radial Gold & Blue Background Glow */}
+      <div
+        aria-hidden="true"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] sm:w-[900px] h-[400px] bg-gradient-to-b from-[#C9A961]/15 via-[#152A4A]/25 to-transparent rounded-full blur-[140px] pointer-events-none -z-10"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-10 right-10 w-[350px] h-[350px] bg-[#C9A961]/08 rounded-full blur-[100px] pointer-events-none -z-10"
+      />
 
-        {/* Rotary Year Badge Pill */}
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 flex flex-col items-center w-full">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="section-badge-gold mb-6 sm:mb-8 shadow-sm"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-center w-full"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A] shrink-0" aria-hidden="true" />
-          <span>TEAM LIA · 2026–27 • Rotaract District 3206</span>
-        </motion.div>
-
-        {/* TEAM LIA Brand Identity & MAAYON Crest */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center mb-6 sm:mb-8"
-        >
-          {/* LIA Shield + MAAYON Crest row */}
-          <div className="flex items-center gap-4 sm:gap-6 mb-5">
-            <div className="relative group">
-              <div aria-hidden="true" className="absolute -inset-2 bg-gradient-to-r from-[#D7B65A]/20 via-[#174EA6]/15 to-[#D7B65A]/20 rounded-2xl blur-md opacity-60 group-hover:opacity-100 transition-opacity" />
-              <div className="relative glass-card rounded-2xl p-3 sm:p-4 backdrop-blur-xl shadow-md border border-white/80 dark:border-white/14 flex items-center justify-center bg-white/70 dark:bg-white/5">
-                <img
-                  src="/assets/logos/lia-shield.png"
-                  alt="Rotaract Club of Lead India Ahead shield crest"
-                  loading="eager"
-                  decoding="async"
-                  className="h-10 sm:h-14 md:h-16 w-auto object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.08)] dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                />
-              </div>
+          {/* 1. LIA Shield Crest Logo */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <div className="relative p-3 sm:p-4 rounded-2xl bg-[#0E1F38] border border-white/10 shadow-2xl backdrop-blur-md">
+              <img
+                src="/assets/logos/lia-shield.png"
+                alt="Rotaract Club of Lead India Ahead official shield crest"
+                loading="eager"
+                decoding="async"
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+              />
             </div>
+          </motion.div>
 
-            <div aria-hidden="true" className="w-px h-10 sm:h-14 bg-gradient-to-b from-transparent via-[#D7B65A]/40 to-transparent" />
-
-            <div className="relative group">
-              <div aria-hidden="true" className="absolute -inset-2 bg-gradient-to-r from-[#D7B65A]/30 via-[#00C4CC]/20 to-[#174EA6]/30 rounded-2xl blur-md opacity-75 group-hover:opacity-100 transition-opacity" />
-              <div className="relative bg-white/95 dark:bg-[#07111F]/90 border border-[#D7B65A]/45 rounded-2xl p-2 sm:p-3 shadow-md flex items-center justify-center overflow-hidden">
-                <img
-                  src="/assets/logos/maayon-official.jpg"
-                  alt="MAAYON 2026-27 Presidential Theme poster"
-                  loading="eager"
-                  decoding="async"
-                  className="h-16 sm:h-24 md:h-28 w-auto object-contain rounded-lg filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* President Profile Badge */}
-          <div className="flex items-center space-x-2 text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-300 glass-subtle px-3.5 py-1.5 rounded-full shadow-sm border border-white/80 dark:border-white/12">
-            <MemberAvatar
-              src="/assets/members/hariharan.jpg"
-              name={CLUB_INFO.president.name}
-              size="sm"
-              className="w-6 h-6 rounded-full border border-[#D7B65A]/50 shrink-0"
-            />
-            <span className="text-slate-500 dark:text-slate-400">President:</span>
-            <span className="font-bold text-slate-900 dark:text-white tracking-wide">
-              {CLUB_INFO.president.name}
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Primary TEAM LIA Editorial Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.35 }}
-          className="space-y-4 sm:space-y-6 max-w-4xl w-full"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs font-bold tracking-widest uppercase text-slate-500 dark:text-slate-400">
-            <span>Since {CLUB_INFO.established}</span>
-            <span className="text-[#B89432] dark:text-[#D7B65A]">•</span>
-            <span>{CLUB_INFO.district}</span>
-            <span className="text-[#B89432] dark:text-[#D7B65A]">•</span>
-            <span>Coimbatore</span>
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="font-heading font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-slate-900 dark:text-white leading-[1.04] editorial-heading">
-              TEAM <span className="gold-gradient-text">LIA</span>
+          {/* 2. Tagline as Large Serif Headline in Sequence */}
+          <motion.div variants={itemVariants} className="space-y-1 sm:space-y-2 mb-6">
+            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+              Together, We <span className="text-[#C9A961]">Lead.</span>
             </h1>
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#B89432] dark:text-[#D7B65A]">
-              {CLUB_INFO.rotaryYear}
+            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+              Together, We <span className="text-[#C9A961]">Serve.</span>
+            </h1>
+            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+              Together, We <span className="text-[#C9A961]">Grow.</span>
+            </h1>
+          </motion.div>
+
+          {/* 3. Short Sub-line: Club Name & Rotary Year */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <p className="text-xs sm:text-sm md:text-base text-[#8E9DAE] font-medium tracking-wide flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[#F5F1E8] font-semibold">{CLUB_INFO.name}</span>
+              <span className="text-[#C9A961]">•</span>
+              <span>Rotary Year 2026–27</span>
+              <span className="text-[#C9A961]">•</span>
+              <span>District 3206</span>
             </p>
-          </div>
+          </motion.div>
 
-          <div className="pt-1">
-            <p className="hero-tagline text-base sm:text-xl md:text-2xl font-heading font-semibold text-slate-800 dark:text-slate-100 leading-snug">
-              {CLUB_INFO.teamThemeTagline.split(". ").map((line, i, arr) => (
-                <React.Fragment key={i}>
-                  {line}{i < arr.length - 1 ? "." : ""}
-                  {i < arr.length - 1 && <br className="hidden sm:block" />}
-                  {i < arr.length - 1 && <span className="sm:hidden"> </span>}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-
-          <p className="max-w-2xl mx-auto text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed pt-1 px-2">
-            One team. One purpose. A year dedicated to leadership, service, fellowship and meaningful impact — from the{" "}
-            <span className="text-slate-900 dark:text-white font-semibold">Rotaract Club of Lead India Ahead</span>.
-          </p>
-        </motion.div>
-
-        {/* Light Liquid Glass CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 w-full sm:w-auto"
-        >
-          <a
-            href="/team"
-            className="w-full sm:w-auto btn-liquid-primary px-8 py-3.5 rounded-full text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2 group focus-ring shadow-sm"
+          {/* 4. Two Buttons: Primary Gold "Join Us" & Outline "Our Projects" */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
           >
-            <Users className="w-4 h-4" aria-hidden="true" />
-            <span>Explore Team</span>
-            <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </a>
+            <button
+              onClick={handleJoinClick}
+              className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider text-[#07111F] bg-[#C9A961] hover:bg-[#DFCA95] transition-all transform hover:-translate-y-0.5 shadow-xl flex items-center justify-center space-x-2 group cursor-pointer"
+            >
+              <span>Join Us</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </button>
 
-          <button
-            onClick={onExploreClick}
-            className="w-full sm:w-auto btn-liquid-glass px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 focus-ring cursor-pointer shadow-sm"
+            <button
+              onClick={handleProjectsClick}
+              className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#F5F1E8] bg-[#0E1F38] hover:bg-[#152A4A] border border-[#C9A961]/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+            >
+              <span>Our Projects</span>
+            </button>
+          </motion.div>
+
+          {/* 5. Scroll-down Indicator */}
+          <motion.a
+            href="#about"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: shouldReduceMotion ? 0 : 1.2 }}
+            className="inline-flex flex-col items-center mt-16 sm:mt-20 text-[#8E9DAE] hover:text-[#C9A961] transition-colors group cursor-pointer"
+            aria-label="Scroll down to About section"
           >
-            <span>Our Projects</span>
-          </button>
-
-          <button
-            onClick={onMeetClick}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-full text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all focus-ring cursor-pointer"
-          >
-            <span>Meet Our Members</span>
-          </button>
+            <span className="text-[10px] uppercase font-bold tracking-widest mb-1.5">Scroll to explore</span>
+            <ArrowDown className="w-4 h-4 animate-bounce text-[#C9A961]" aria-hidden="true" />
+          </motion.a>
         </motion.div>
-
-        {/* Floating Light Liquid Glass Metadata Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.65 }}
-          className="mt-12 sm:mt-16 w-full max-w-3xl glass-card rounded-3xl p-5 sm:p-6 border border-white/90 dark:border-white/14 shadow-md backdrop-blur-xl"
-        >
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center divide-y sm:divide-y-0 sm:divide-x divide-slate-200/60 dark:divide-white/10">
-            <div className="pt-2 sm:pt-0">
-              <div className="text-xl sm:text-3xl font-heading font-extrabold text-[#B89432] dark:text-[#E8D89A]">2012</div>
-              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Established</div>
-            </div>
-            <div className="pt-2 sm:pt-0">
-              <div className="text-xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-white">Dist. 3206</div>
-              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Rotaract District</div>
-            </div>
-            <div className="pt-2 sm:pt-0">
-              <div className="text-xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-white">90062</div>
-              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Club ID • Grp 1/4</div>
-            </div>
-            <div className="pt-2 sm:pt-0">
-              <div className="text-xl sm:text-3xl font-heading font-extrabold text-[#B89432] dark:text-[#D7B65A]">Texcity</div>
-              <div className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Sponsor Rotary Club</div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.a
-          href="#about"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.85 }}
-          className="inline-flex flex-col items-center mt-12 text-slate-500 dark:text-slate-400 hover:text-[#B89432] dark:hover:text-[#D7B65A] transition-colors group cursor-pointer focus-ring rounded-full p-2"
-          aria-label="Scroll down to About section"
-        >
-          <span className="text-[10px] uppercase font-bold tracking-widest mb-1.5">Scroll to explore</span>
-          <ArrowDown className="w-4 h-4 animate-bounce text-[#B89432] dark:text-[#D7B65A]" aria-hidden="true" />
-        </motion.a>
       </div>
     </section>
   );

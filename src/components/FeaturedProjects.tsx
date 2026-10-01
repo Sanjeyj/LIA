@@ -5,6 +5,7 @@ import { ArrowUpRight, Calendar, X, ShieldCheck, ExternalLink } from "lucide-rea
 import { PROJECTS } from "../data/projects";
 import type { Project } from "../types";
 import { getPublishedProjects } from "../services/projects";
+import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
@@ -80,27 +81,26 @@ export const FeaturedProjects = () => {
   const wideProject = projectsList[3] || PROJECTS[3];
 
   return (
-    <section id="projects" className="py-24 sm:py-32 scroll-mt-28 sm:scroll-mt-36 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal>
+    <Section id="projects" className="bg-[#07111F] border-t border-white/5">
+      <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
-              <span>Impact in Action</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
-              FEATURED <span className="gold-gradient-text">PROJECTS</span>
-            </h2>
+            <SectionHeading
+              badge="Impact in Action"
+              title="FEATURED PROJECTS"
+              centered={false}
+              className="mb-0"
+            />
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
+            <p className="max-w-md text-[#8E9DAE] text-sm sm:text-base font-normal">
               Asymmetric showcase of verified community-led programs, sports development, public healthcare, and youth initiatives.
             </p>
             <Link
               to="/projects"
-              className="btn-liquid-glass shrink-0 text-xs shadow-sm"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-[#0E1F38] hover:bg-[#152A4A] border border-[#C9A961]/30 text-xs font-semibold text-[#C9A961] shrink-0 transition-colors shadow-sm"
             >
               <span>Explore All</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -289,8 +289,7 @@ export const FeaturedProjects = () => {
           )}
 
         </div>
-        </SectionReveal>
-      </div>
+      </SectionReveal>
 
       {/* Project Detail Modal */}
       <AnimatePresence>
@@ -410,6 +409,6 @@ export const FeaturedProjects = () => {
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </Section>
   );
 };

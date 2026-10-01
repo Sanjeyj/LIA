@@ -5,6 +5,7 @@ import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Calendar, Maximize2, 
 import { GALLERY_ITEMS } from "../data/gallery";
 import type { GalleryItem } from "../types";
 import { getPublishedGalleryImages } from "../services/gallery";
+import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
@@ -80,20 +81,18 @@ export const Gallery = () => {
   }, [selectedPhotoIndex, filteredItems.length]);
 
   return (
-    <section id="gallery" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal>
+    <Section id="gallery" className="bg-[#07111F] border-t border-white/5">
+      <SectionReveal>
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
-              <ImageIcon className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A]" />
-              <span>Visual Chronicle</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
-              COMMUNITY <span className="gold-gradient-text">GALLERY</span>
-            </h2>
+            <SectionHeading
+              badge="Visual Chronicle"
+              title="COMMUNITY GALLERY"
+              centered={false}
+              className="mb-0"
+            />
           </div>
 
           {/* Filter Pills */}
@@ -187,7 +186,6 @@ export const Gallery = () => {
         </div>
 
         </SectionReveal>
-      </div>
 
       {/* Fullscreen Lightbox */}
       <AnimatePresence>
@@ -271,6 +269,6 @@ export const Gallery = () => {
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </Section>
   );
 };

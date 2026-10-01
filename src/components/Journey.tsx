@@ -2,31 +2,22 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChevronRight, ChevronLeft, Award } from "lucide-react";
 import { MILESTONES } from "../data/journey";
+import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 export const Journey: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="journey" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal>
+    <Section id="journey" className="bg-[#07111F] border-t border-white/5">
+      <SectionReveal>
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
-          <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
-              <Clock className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A]" />
-              <span>Institutional Evolution</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
-              OUR <span className="gold-gradient-text">JOURNEY</span>
-            </h2>
-          </div>
-          <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base mt-4 md:mt-0 font-normal">
-            From our founding in 2012 under Rotary Club of Coimbatore Texcity to the dynamic MAAYON chapter of 2026–27.
-          </p>
-        </div>
+        <SectionHeading
+          badge="Institutional Evolution"
+          title="OUR JOURNEY"
+          subtitle="From our founding in 2012 under Rotary Club of Coimbatore Texcity to the dynamic MAAYON chapter of 2026–27."
+        />
 
         {/* Desktop Interactive Horizontal Timeline */}
         <div className="hidden lg:block">
@@ -171,8 +162,7 @@ export const Journey: React.FC = () => {
           ))}
         </div>
 
-        </SectionReveal>
-      </div>
-    </section>
+      </SectionReveal>
+    </Section>
   );
 };

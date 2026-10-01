@@ -35,7 +35,7 @@ export const CLUB_INFO: ClubInfo = {
     address: "Coimbatore, Tamil Nadu, India",
   },
   links: {
-    joinUrl: "#contact",
-    volunteerUrl: "#contact",
+    joinUrl: "/#contact",
+    volunteerUrl: "/#contact",
   },
 };

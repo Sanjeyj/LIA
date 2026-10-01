@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { getLatestOpportunities } from '../services/careers';
 import type { Career } from '../types/supabase';
+import { Section, SectionHeading } from './Section';
 
 export const LatestOpportunities: React.FC = () => {
   const [opportunities, setOpportunities] = useState<Career[]>([]);
@@ -49,37 +50,27 @@ export const LatestOpportunities: React.FC = () => {
   };
 
   return (
-    <section id="careers" className="py-20 sm:py-28 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#D7B65A]/5 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/10">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D7B65A]/10 border border-[#D7B65A]/30 text-[#E8D89A] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-[#D7B65A]" />
-              Professional Avenue &amp; Placements
-            </div>
-
-            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight">
-              Careers &amp; Opportunities
-            </h2>
-
-            <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-              Discover verified internships, fellowships, and social impact positions curated
-              for the youth and members of Rotaract Club of Lead India Ahead.
-            </p>
-          </div>
-
-          <Link
-            to="/careers"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-[#D7B65A] bg-[#D7B65A]/10 hover:bg-[#D7B65A] hover:text-[#07111F] border border-[#D7B65A]/30 transition-all duration-300 self-start md:self-auto group"
-          >
-            <span>View All Opportunities</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+    <Section id="careers" className="bg-[#07111F] border-t border-white/5">
+      {/* Section Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/10 mb-12">
+        <div className="space-y-3 max-w-2xl">
+          <SectionHeading
+            badge="Professional Avenue & Placements"
+            title="CAREERS & OPPORTUNITIES"
+            subtitle="Discover verified internships, fellowships, and social impact positions curated for the youth and members of Rotaract Club of Lead India Ahead."
+            centered={false}
+            className="mb-0"
+          />
         </div>
+
+        <Link
+          to="/careers"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-[#C9A961] bg-[#0E1F38] hover:bg-[#152A4A] border border-[#C9A961]/30 transition-all duration-300 self-start md:self-auto group shadow-sm"
+        >
+          <span>View All Opportunities</span>
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </div>
 
         {/* 3-Column Opportunities Showcase */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -175,7 +166,6 @@ export const LatestOpportunities: React.FC = () => {
             </motion.div>
           ))}
         </div>
-      </div>
-    </section>
+    </Section>
   );
 };

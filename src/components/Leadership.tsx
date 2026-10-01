@@ -5,6 +5,7 @@ import { TEAM_MEMBERS } from "../data/team";
 import type { TeamMember } from "../types";
 import { getPublishedTeamMembers } from "../services/team";
 import { MemberAvatar } from "./MemberAvatar";
+import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
@@ -64,45 +65,42 @@ export const Leadership = () => {
     ? membersList.filter((m) => m.isExecutive)
     : membersList;
 
-  const president = membersList.find(
-    (m) => m.roleCategory === "PRESIDENT" || (m.position.toLowerCase().includes("president") && !m.position.toLowerCase().includes("past"))
-  ) || membersList[0];
+  const president = membersList.find((m) => m.roleCategory === "PRESIDENT") || membersList[0];
 
   return (
-    <section id="leadership" className="py-24 sm:py-32 scroll-mt-28 sm:scroll-mt-36 relative overflow-hidden border-t border-slate-200/60 dark:border-white/8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal>
+    <Section id="leadership" className="bg-[#07111F] border-t border-white/5">
+      <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14">
           <div>
-            <div className="section-badge-gold mb-3 shadow-sm">
-              <Users className="w-3.5 h-3.5 text-[#B89432] dark:text-[#D7B65A]" />
-              <span>Leadership &amp; Board of Directors</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight editorial-heading">
-              TEAM <span className="gold-gradient-text">LIA 2026–27</span> • Leadership Council
-            </h2>
+            <SectionHeading
+              badge="Leadership & Board of Directors"
+              title="TEAM LIA 2026–27"
+              subtitle="The executive council and dedicated board leading community service and youth development in Coimbatore."
+              centered={false}
+              className="mb-0"
+            />
           </div>
 
           {/* Toggle between Executive Council and All Board */}
-          <div className="flex items-center space-x-1 sm:space-x-2 glass-subtle p-1.5 rounded-full border border-white/12 mt-6 md:mt-0 w-full sm:w-auto justify-center shadow-lg">
+          <div className="flex items-center space-x-1 sm:space-x-2 bg-[#0E1F38] p-1.5 rounded-full border border-white/10 mt-6 md:mt-0 w-full sm:w-auto justify-center shadow-lg">
             <button
               onClick={() => setActiveTab("EXECUTIVE")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring ${
+              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 activeTab === "EXECUTIVE"
-                  ? "btn-liquid-primary shadow-md"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-[#C9A961] text-[#07111F] shadow-md"
+                  : "text-[#8E9DAE] hover:text-[#F5F1E8]"
               }`}
             >
               Executive Council
             </button>
             <button
               onClick={() => setActiveTab("ALL")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring ${
+              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 activeTab === "ALL"
-                  ? "btn-liquid-primary shadow-md"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-[#C9A961] text-[#07111F] shadow-md"
+                  : "text-[#8E9DAE] hover:text-[#F5F1E8]"
               }`}
             >
               All Board ({membersList.length})
@@ -241,7 +239,6 @@ export const Leadership = () => {
         </div>
 
         </SectionReveal>
-      </div>
 
       {/* Appointment Letter Liquid Glass Modal */}
       <AnimatePresence>
@@ -294,6 +291,6 @@ export const Leadership = () => {
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </Section>
   );
 };

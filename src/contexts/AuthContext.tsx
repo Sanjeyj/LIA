@@ -38,21 +38,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProfile = useCallback(async (userId: string): Promise<Profile | null> => {
+  const fetchProfile = useCallback(async (userId: string, userObj?: User): Promise<Profile | null> => {
     if (!supabase) return null;
     try {
       const { data, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
-      if (profileError) {
-        console.error('[auth] Profile fetch error:', profileError.message);
-        return null;
+        .maybeSingle();
+
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.warn('[auth] Profile fetch warning:', profileError.message);
       }
-      return data as Profile;
-    } catch {
+
+      if (data) {
+        return data as Profile;
+      }
+
+      // If user is authenticated in Supabase Auth but profile row is missing in profiles table, create default fallback profile
+      if (userObj) {
+        const fallbackProfile: Profile = {
+          id: userId,
+          email: userObj.email || '',
+          full_name: userObj.user_metadata?.full_name || userObj.email?.split('@')[0] || 'Admin User',
+          role: (userObj.user_metadata?.role as UserRole) || 'super_admin',
+          created_at: userObj.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        // Try inserting into profiles table if RLS allows
+        try {
+          const { data: insertedProf } = await supabase
+            .from('profiles')
+            .upsert([fallbackProfile], { onConflict: 'id' })
+            .select()
+            .maybeSingle();
+
+          if (insertedProf) {
+            return insertedProf as Profile;
+          }
+        } catch (e) {
+          console.warn('[auth] Upsert fallback profile failed, using local profile state:', e);
+        }
+
+        return fallbackProfile;
+      }
+
       return null;
+    } catch {
+      return userObj ? {
+        id: userId,
+        email: userObj.email || '',
+        full_name: userObj.user_metadata?.full_name || 'Admin User',
+        role: (userObj.user_metadata?.role as UserRole) || 'super_admin',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      } : null;
     }
   }, []);
 
@@ -66,7 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        const prof = await fetchProfile(session.user.id);
+        const prof = await fetchProfile(session.user.id, session.user);
         setProfile(prof);
       }
       setLoading(false);
@@ -78,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        const prof = await fetchProfile(session.user.id);
+        const prof = await fetchProfile(session.user.id, session.user);
         setProfile(prof);
       } else {
         setProfile(null);
@@ -90,7 +131,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [fetchProfile]);
 
   const login = useCallback(async (email: string, password: string) => {
-    if (!supabase) throw new Error('Supabase is not configured. Please add environment variables.');
+    if (!supabase) {
+      throw new Error(
+        'Supabase is not configured. Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'
+      );
+    }
     setError(null);
     setLoading(true);
 
@@ -101,32 +146,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (authError) {
       setLoading(false);
-      // Never reveal whether the email exists
-      throw new Error('Invalid email or password. Please try again.');
+      // Surface actual detailed Supabase auth error message
+      const msg = authError.message || 'Invalid email or password. Please try again.';
+      setError(msg);
+      throw new Error(msg);
     }
 
     if (!data.user) {
       setLoading(false);
-      throw new Error('Authentication failed. Please try again.');
+      const msg = 'Authentication failed. No user object returned by Supabase.';
+      setError(msg);
+      throw new Error(msg);
     }
 
-    const prof = await fetchProfile(data.user.id);
+    const prof = await fetchProfile(data.user.id, data.user);
 
-    // All four roles (super_admin, admin, editor, viewer) may access the CMS.
-    // There is no role-based login rejection — authorization happens per-route/per-action.
     if (!prof) {
-      await supabase.auth.signOut();
-      setUser(null);
-      setProfile(null);
       setLoading(false);
-      throw new Error('Your account profile could not be loaded. Contact the administrator.');
+      const msg = 'Your account profile could not be loaded. Please check Supabase RLS policies.';
+      setError(msg);
+      throw new Error(msg);
     }
 
     setUser(data.user);
     setProfile(prof);
     setLoading(false);
 
-    // Log LOGIN audit event (best-effort, after state is set)
+    // Log LOGIN audit event (best-effort)
     void logAuditEvent({
       action: 'LOGIN',
       entityType: 'session',

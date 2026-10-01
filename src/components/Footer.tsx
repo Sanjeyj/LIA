@@ -46,7 +46,7 @@ export const Footer = ({ onOpenJoinModal }: FooterProps) => {
   ];
 
   return (
-    <footer className="bg-slate-100/80 dark:bg-[#03070E] text-slate-700 dark:text-slate-300 relative overflow-hidden border-t border-slate-200/80 dark:border-white/10">
+    <footer className="bg-[#040812] text-slate-300 relative overflow-hidden border-t border-[#C9A961]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-12 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-12 pb-12 sm:pb-16 border-b border-slate-200/80 dark:border-white/10">
 

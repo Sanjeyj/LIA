@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, Shield, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Shield, AlertCircle, Info } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 export function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -85,12 +86,22 @@ export function AdminLogin() {
         >
           <h2 className="text-lg font-semibold text-slate-100 mb-6">Administrator Login</h2>
 
+          {!isSupabaseConfigured && (
+            <div className="flex items-start gap-3 p-4 rounded-xl mb-6 bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs leading-relaxed">
+              <Info className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="block text-amber-300 font-semibold mb-1">Supabase Environment Credentials Needed</strong>
+                Create a <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">.env</code> file in your project root with <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">VITE_SUPABASE_URL</code> and <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">VITE_SUPABASE_ANON_KEY</code>.
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="flex items-start gap-3 p-4 rounded-xl mb-6"
               style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}
             >
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-red-300 text-sm">{error}</p>
+              <p className="text-red-300 text-sm leading-relaxed">{error}</p>
             </div>
           )}
 

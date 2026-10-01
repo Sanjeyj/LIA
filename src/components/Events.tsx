@@ -6,6 +6,7 @@ import { EVENTS } from "../data/events";
 import type { Event } from "../types";
 import { EventModal } from "./EventModal";
 import { getPublishedEvents } from "../services/events";
+import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
@@ -76,32 +77,31 @@ export const Events = () => {
     return ev.category.toUpperCase().includes(activeFilter);
   });
 
-  const featuredEvent = eventsList.find((e) => e.featured && e.id.includes("the-one")) || eventsList.find((e) => e.featured) || eventsList[0];
+  const featuredEvent = eventsList.find((ev) => ev.featured) || eventsList[0];
 
   return (
-    <section id="events" className="py-24 sm:py-32 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal>
+    <Section id="events" className="bg-[#07111F] border-t border-white/5">
+      <SectionReveal>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full glass-card border border-[#D7B65A]/30 text-xs font-semibold text-[#B89432] dark:text-[#D7B65A] uppercase tracking-wider mb-3 shadow-sm">
-              <span>Verified Club Activities</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-slate-900 dark:text-white tracking-tight">
-              EVENTS &amp; <span className="gold-gradient-text">INITIATIVES</span>
-            </h2>
+            <SectionHeading
+              badge="Verified Club Activities"
+              title="EVENTS & INITIATIVES"
+              centered={false}
+              className="mb-0"
+            />
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <p className="max-w-md text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
+            <p className="max-w-md text-[#8E9DAE] text-sm sm:text-base font-normal">
               Chronological records of verified club installations, district seminars, youth sports tournaments, and public health initiatives.
             </p>
             <Link
               to="/events"
-              className="btn-liquid-glass shrink-0 text-xs shadow-sm"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-[#0E1F38] hover:bg-[#152A4A] border border-[#C9A961]/30 text-xs font-semibold text-[#C9A961] shrink-0 transition-colors shadow-sm"
             >
-              <span>Explore All</span>
+              <span>Explore All Events</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -277,13 +277,12 @@ export const Events = () => {
         </motion.div>
 
         </SectionReveal>
-      </div>
 
       {/* Event Details Dialog */}
       <EventModal
         event={selectedEvent}
         onClose={() => setSelectedEvent(null)}
       />
-    </section>
+    </Section>
   );
 };

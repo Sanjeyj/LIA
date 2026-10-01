@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { motion, useSpring, useTransform } from "framer-motion";
 
 interface InteractiveMaayonBgProps {
@@ -12,25 +12,61 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
   opacity = 0.48,
   scale = 1.08,
 }) => {
-  const [, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Smooth springs for fluid mouse parallax movement
+  // Smooth springs for fluid parallax movement (works on both mouse & touch/gyro)
   const springConfig = { stiffness: 90, damping: 16, mass: 0.6 };
   const mouseX = useSpring(0, springConfig);
   const mouseY = useSpring(0, springConfig);
 
   useEffect(() => {
+    // 1. Mouse movement listener for desktop
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX / innerWidth - 0.5) * 2;
       const y = (e.clientY / innerHeight - 0.5) * 2;
-      setMousePos({ x, y });
       mouseX.set(x);
       mouseY.set(y);
     };
 
+    // 2. Touch movement listener for mobile touch drag
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        const { innerWidth, innerHeight } = window;
+        const x = (touch.clientX / innerWidth - 0.5) * 2;
+        const y = (touch.clientY / innerHeight - 0.5) * 2;
+        mouseX.set(x);
+        mouseY.set(y);
+      }
+    };
+
+    // 3. Gyroscope / Device Orientation listener for mobile tilting
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        // gamma: left-to-right tilt [-90, 90]
+        // beta: front-to-back tilt [-180, 180]
+        const x = Math.max(-1, Math.min(1, e.gamma / 30));
+        const y = Math.max(-1, Math.min(1, (e.beta - 40) / 30));
+        mouseX.set(x);
+        mouseY.set(y);
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchstart", handleTouchMove, { passive: true });
+    
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchstart", handleTouchMove);
+      if (window.DeviceOrientationEvent) {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
+    };
   }, [mouseX, mouseY]);
 
   // Transform springs into smooth 3D parallax offsets
@@ -54,15 +90,16 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
         }}
         className="relative w-full max-w-6xl h-auto flex items-center justify-center transition-opacity duration-500"
       >
-        {/* Continuous Animated Breathing & Floating Wrapper */}
+        {/* Continuous Animated Breathing & Floating Wrapper (Guarantees movement on all devices) */}
         <motion.div
           animate={{
-            y: [0, -18, 0, 14, 0],
-            rotateZ: [0, 1.8, 0, -1.8, 0],
-            scale: [1, 1.03, 1, 0.98, 1],
+            y: [0, -22, 0, 18, 0],
+            x: [0, 12, 0, -12, 0],
+            rotateZ: [0, 2.5, 0, -2.5, 0],
+            scale: [1, 1.05, 1, 0.96, 1],
           }}
           transition={{
-            duration: 8,
+            duration: 7,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -71,28 +108,28 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
           {/* Pulsing Specular Light Rays & Radial Aura (Gold & Electric Cyan Radiance) */}
           <motion.div
             animate={{
-              opacity: [0.5, 0.85, 0.5],
-              scale: [0.95, 1.08, 0.95],
+              opacity: [0.5, 0.9, 0.5],
+              scale: [0.92, 1.12, 0.92],
             }}
             transition={{
-              duration: 5,
+              duration: 4.5,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute w-[850px] h-[450px] bg-gradient-to-r from-[#D7B65A]/45 via-[#00C4CC]/40 to-[#174EA6]/45 rounded-full blur-[110px] opacity-75 dark:opacity-65 pointer-events-none"
+            className="absolute w-[320px] sm:w-[850px] h-[250px] sm:h-[450px] bg-gradient-to-r from-[#D7B65A]/45 via-[#00C4CC]/40 to-[#174EA6]/45 rounded-full blur-[80px] sm:blur-[110px] opacity-75 dark:opacity-65 pointer-events-none"
           />
 
           <motion.div
             animate={{
-              opacity: [0.4, 0.75, 0.4],
+              opacity: [0.4, 0.8, 0.4],
               rotate: [0, 180, 360],
             }}
             transition={{
-              duration: 18,
+              duration: 16,
               repeat: Infinity,
               ease: "linear",
             }}
-            className="absolute w-[600px] h-[320px] bg-gradient-to-tr from-[#00A8B5]/35 via-[#F3E5AB]/50 to-[#0B1938]/40 rounded-full blur-3xl opacity-70 pointer-events-none"
+            className="absolute w-[280px] sm:w-[600px] h-[200px] sm:h-[320px] bg-gradient-to-tr from-[#00A8B5]/35 via-[#F3E5AB]/50 to-[#0B1938]/40 rounded-full blur-2xl sm:blur-3xl opacity-70 pointer-events-none"
           />
 
           {/* Glowing MAAYON 3D Banner Logo Graphic Container */}
@@ -102,13 +139,13 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
             <motion.img
               animate={{
                 filter: [
-                  "drop-shadow(0 0 25px rgba(215,182,90,0.4)) brightness(1)",
-                  "drop-shadow(0 0 50px rgba(0,196,204,0.7)) brightness(1.25)",
-                  "drop-shadow(0 0 25px rgba(215,182,90,0.4)) brightness(1)",
+                  "drop-shadow(0 0 20px rgba(215,182,90,0.4)) brightness(1)",
+                  "drop-shadow(0 0 45px rgba(0,196,204,0.75)) brightness(1.3)",
+                  "drop-shadow(0 0 20px rgba(215,182,90,0.4)) brightness(1)",
                 ],
               }}
               transition={{
-                duration: 4,
+                duration: 3.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}

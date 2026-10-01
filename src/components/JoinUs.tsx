@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Sparkles, X, Shield, Send } from "lucide-react";
+import { Section, SectionHeading } from "./Section";
 
 interface JoinUsProps {
   isModalOpen: boolean;
@@ -39,7 +40,7 @@ export const JoinUs = ({ isModalOpen, onCloseModal, onOpenModal }: JoinUsProps) 
         particleCount: 80,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#D7B65A", "#06B6D4", "#10B981", "#E8D89A"],
+        colors: ["#C9A961", "#DFCA95", "#A88842"],
       });
     } catch {
       // Confetti fallback
@@ -48,11 +49,8 @@ export const JoinUs = ({ isModalOpen, onCloseModal, onOpenModal }: JoinUsProps) 
 
   return (
     <>
-      <section className="py-24 bg-gradient-to-b from-[#07111F] via-[#09172B] to-[#07111F] relative overflow-hidden border-t border-white/5">
-        {/* Ambient glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#D7B65A]/10 blur-[130px] pointer-events-none -z-10" />
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <Section className="bg-[#07111F] border-t border-white/5 relative overflow-hidden">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -60,24 +58,16 @@ export const JoinUs = ({ isModalOpen, onCloseModal, onOpenModal }: JoinUsProps) 
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#10233D] border border-[#D7B65A]/40 text-xs font-semibold text-[#E8D89A] uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-[#D7B65A]" />
-              <span>Shape the Future • Join Team LIA</span>
-            </div>
+            <SectionHeading
+              badge="Shape the Future • Join Team LIA"
+              title="YOUR NEXT CHAPTER STARTS HERE"
+              subtitle="Whether you are a student exploring leadership or a young professional looking to create meaningful social impact, the Rotaract Club of Lead India Ahead welcomes you to a community of purpose."
+            />
 
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-white tracking-tight leading-tight">
-              YOUR NEXT CHAPTER <br />
-              <span className="gold-gradient-text">STARTS HERE.</span>
-            </h2>
-
-            <p className="max-w-2xl mx-auto text-slate-300 text-xs sm:text-base md:text-lg font-normal leading-relaxed">
-              Whether you are a student exploring leadership or a young professional looking to create meaningful social impact, the Rotaract Club of Lead India Ahead welcomes you to a community of purpose.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
               <button
                 onClick={onOpenModal}
-                className="w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider text-[#07111F] bg-gradient-to-r from-[#D7B65A] via-[#E8D89A] to-[#D7B65A] hover:shadow-[0_0_30px_rgba(215,182,90,0.5)] transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center space-x-2 group"
+                className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider text-[#07111F] bg-[#C9A961] hover:bg-[#DFCA95] transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center space-x-2 group shadow-xl"
               >
                 <span>Join Rotaract LIA</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -103,7 +93,7 @@ export const JoinUs = ({ isModalOpen, onCloseModal, onOpenModal }: JoinUsProps) 
             </div>
           </motion.div>
         </div>
-      </section>
+      </Section>
 
       {/* Join Application Modal */}
       <AnimatePresence>

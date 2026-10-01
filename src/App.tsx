@@ -129,6 +129,7 @@ export function App() {
         <Hero
           onExploreClick={handleExploreClick}
           onMeetClick={handleMeetClick}
+          onOpenJoinModal={handleOpenJoinModal}
         />
 
         {/* About Section */}
