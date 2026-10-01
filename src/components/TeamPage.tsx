@@ -38,18 +38,21 @@ import { SEO } from './SEO';
 import { getCanonicalUrl } from '../config/site';
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
+  const staticMatch = TEAM_MEMBERS.find(
+    (m) => m.id === dbMember.id || m.name.toLowerCase().trim() === dbMember.name?.toLowerCase().trim()
+  );
   return {
     id: dbMember.id,
     name: dbMember.name,
     position: dbMember.designation,
     term: dbMember.term || '2026–27',
-    image: dbMember.profile_image_url || undefined,
-    letterImage: dbMember.letter_image_url || undefined,
-    bio: dbMember.bio || undefined,
-    collegeOrCompany: dbMember.college_company || undefined,
-    department: dbMember.department || undefined,
+    image: dbMember.profile_image_url || staticMatch?.image || undefined,
+    letterImage: dbMember.letter_image_url || staticMatch?.letterImage || undefined,
+    bio: dbMember.bio || staticMatch?.bio || undefined,
+    collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
+    department: dbMember.department || staticMatch?.department || undefined,
     isExecutive: Boolean(dbMember.is_executive),
-    roleCategory: dbMember.role_category || (dbMember.is_executive ? 'EXECUTIVE' : 'MEMBER'),
+    roleCategory: dbMember.role_category || staticMatch?.roleCategory || (dbMember.is_executive ? 'EXECUTIVE' : 'MEMBER'),
     linkedin: dbMember.linkedin_url || undefined,
     instagram: dbMember.instagram_url || undefined,
   };

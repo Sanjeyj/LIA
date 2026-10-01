@@ -10,31 +10,34 @@ import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
+  const staticMatch = EVENTS.find(
+    (ev) => ev.id === dbEvent.id || ev.slug === dbEvent.slug || ev.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
+  );
   return {
     id: dbEvent.id,
     title: dbEvent.title,
-    subtitle: dbEvent.subtitle || undefined,
+    subtitle: dbEvent.subtitle || staticMatch?.subtitle || undefined,
     slug: dbEvent.slug,
-    date: dbEvent.event_date || undefined,
-    displayDate: dbEvent.display_date || dbEvent.event_date || undefined,
-    year: dbEvent.year || new Date(dbEvent.event_date || Date.now()).getFullYear(),
-    category: dbEvent.category || "General",
+    date: dbEvent.event_date || staticMatch?.date || undefined,
+    displayDate: dbEvent.display_date || dbEvent.event_date || staticMatch?.displayDate || undefined,
+    year: dbEvent.year || staticMatch?.year || new Date(dbEvent.event_date || Date.now()).getFullYear(),
+    category: dbEvent.category || staticMatch?.category || "General",
     status: (dbEvent.status === "published" ? "completed" : "upcoming") as any,
-    location: dbEvent.venue || dbEvent.city || undefined,
-    description: dbEvent.description || "",
-    shortDescription: dbEvent.short_description || dbEvent.description || "",
-    image: dbEvent.cover_image_url || undefined,
+    location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
+    description: dbEvent.description || staticMatch?.description || "",
+    shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || "",
+    image: dbEvent.cover_image_url || staticMatch?.image || "/assets/events/the-one.jpg",
     featured: Boolean(dbEvent.featured),
-    organizerType: dbEvent.organizer_type || "LIA",
-    liaRole: dbEvent.lia_role || "ORGANIZER",
-    organizer: dbEvent.organizer || undefined,
-    collaborators: dbEvent.collaborators || [],
-    tags: dbEvent.tags || [],
+    organizerType: dbEvent.organizer_type || staticMatch?.organizerType || "LIA",
+    liaRole: dbEvent.lia_role || staticMatch?.liaRole || "ORGANIZER",
+    organizer: dbEvent.organizer || staticMatch?.organizer || undefined,
+    collaborators: dbEvent.collaborators || staticMatch?.collaborators || [],
+    tags: dbEvent.tags || staticMatch?.tags || [],
     source: dbEvent.source_platform ? {
       platform: dbEvent.source_platform as any,
       url: dbEvent.source_url || undefined,
       verified: Boolean(dbEvent.source_verified),
-    } : undefined,
+    } : staticMatch?.source,
   };
 }
 

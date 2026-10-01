@@ -9,13 +9,16 @@ import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
+  const staticMatch = GALLERY_ITEMS.find(
+    (g) => g.id === dbItem.id || g.title?.toLowerCase().trim() === dbItem.title?.toLowerCase().trim()
+  );
   return {
     id: dbItem.id,
-    title: dbItem.title || dbItem.caption || "Club Photo",
-    category: (dbItem.category || "EVENTS") as any,
-    image: dbItem.image_url,
-    date: dbItem.date || "",
-    caption: dbItem.caption || undefined,
+    title: dbItem.title || dbItem.caption || staticMatch?.title || "Club Photo",
+    category: (dbItem.category || staticMatch?.category || "EVENTS") as any,
+    image: dbItem.image_url || staticMatch?.image || "/assets/events/the-one.jpg",
+    date: dbItem.date || staticMatch?.date || "",
+    caption: dbItem.caption || staticMatch?.caption || undefined,
   };
 }
 

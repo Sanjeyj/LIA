@@ -9,15 +9,21 @@ import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
+  const staticMatch = TEAM_MEMBERS.find(
+    (m) => m.id === dbMember.id || m.name.toLowerCase().trim() === dbMember.name?.toLowerCase().trim()
+  );
   return {
     id: dbMember.id,
     name: dbMember.name,
     position: dbMember.designation,
+    roleCategory: dbMember.role_category || staticMatch?.roleCategory || "MEMBER",
+    department: dbMember.department || staticMatch?.department,
     term: dbMember.term || "2026–27",
-    image: dbMember.profile_image_url || undefined,
-    letterImage: dbMember.letter_image_url || undefined,
-    bio: dbMember.bio || undefined,
-    collegeOrCompany: dbMember.college_company || undefined,
+    image: dbMember.profile_image_url || staticMatch?.image || undefined,
+    letterImage: dbMember.letter_image_url || staticMatch?.letterImage || undefined,
+    bio: dbMember.bio || staticMatch?.bio || undefined,
+    collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
+    bloodGroup: dbMember.blood_group || staticMatch?.bloodGroup,
     isExecutive: Boolean(dbMember.is_executive),
   };
 }

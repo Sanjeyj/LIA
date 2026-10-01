@@ -9,24 +9,27 @@ import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
+  const staticMatch = PROJECTS.find(
+    (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
+  );
   return {
     id: dbProj.id,
     title: dbProj.title,
     slug: dbProj.slug,
-    category: dbProj.category || "Community Service",
+    category: dbProj.category || staticMatch?.category || "Community Service",
     date: dbProj.project_date || `${dbProj.year || new Date().getFullYear()}`,
     year: dbProj.year || new Date().getFullYear(),
-    description: dbProj.description || "",
-    shortDescription: dbProj.short_description || dbProj.description || "",
-    image: dbProj.cover_image_url || "",
+    description: dbProj.description || staticMatch?.description || "",
+    shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || "",
+    image: dbProj.cover_image_url || staticMatch?.image || "/assets/events/football.jpg",
     featured: Boolean(dbProj.featured),
-    impactMetrics: dbProj.impact_metrics || undefined,
-    collaborators: dbProj.collaborators || undefined,
+    impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
+    collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
     source: dbProj.source_platform ? {
       platform: dbProj.source_platform as any,
       url: dbProj.source_url || undefined,
       verified: Boolean(dbProj.source_verified),
-    } : undefined,
+    } : staticMatch?.source,
   };
 }
 
