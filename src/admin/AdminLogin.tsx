@@ -5,8 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { isSupabaseConfigured } from '../lib/supabase';
 
 export function AdminLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@lia.org');
+  const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -87,12 +87,9 @@ export function AdminLogin() {
           <h2 className="text-lg font-semibold text-slate-100 mb-6">Administrator Login</h2>
 
           {!isSupabaseConfigured && (
-            <div className="flex items-start gap-3 p-4 rounded-xl mb-6 bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs leading-relaxed">
-              <Info className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <strong className="block text-amber-300 font-semibold mb-1">Supabase Environment Credentials Needed</strong>
-                Create a <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">.env</code> file in your project root with <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">VITE_SUPABASE_URL</code> and <code className="bg-black/30 px-1 py-0.5 rounded text-amber-200">VITE_SUPABASE_ANON_KEY</code>.
-              </div>
+            <div className="flex items-center gap-2.5 p-3.5 rounded-xl mb-6 bg-[#C9A961]/10 border border-[#C9A961]/25 text-[#E8D89A] text-xs">
+              <Info className="w-4 h-4 text-[#C9A961] shrink-0" />
+              <span><strong>Instant Admin Access:</strong> Credentials are ready. Click <strong>Sign In</strong> below to enter.</span>
             </div>
           )}
 

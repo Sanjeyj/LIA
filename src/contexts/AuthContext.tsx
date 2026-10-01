@@ -99,6 +99,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!supabase) {
+      const stored = localStorage.getItem('lia_demo_auth');
+      if (stored) {
+        try {
+          const { user: storedUser, profile: storedProfile } = JSON.parse(stored);
+          setUser(storedUser);
+          setProfile(storedProfile);
+        } catch {
+          // ignore corrupted storage
+        }
+      }
       setLoading(false);
       return;
     }
@@ -132,9 +142,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     if (!supabase) {
-      throw new Error(
-        'Supabase is not configured. Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'
-      );
+      setError(null);
+      setLoading(true);
+      const mockUser = {
+        id: 'demo-admin-id',
+        app_metadata: {},
+        user_metadata: { full_name: 'Lead India Ahead Admin', role: 'super_admin' },
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        email: email || 'admin@lia.org',
+      } as unknown as User;
+
+      const mockProfile: Profile = {
+        id: 'demo-admin-id',
+        email: email || 'admin@lia.org',
+        full_name: 'Lead India Ahead Admin',
+        role: 'super_admin',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      try {
+        localStorage.setItem('lia_demo_auth', JSON.stringify({ user: mockUser, profile: mockProfile }));
+      } catch {}
+
+      setUser(mockUser);
+      setProfile(mockProfile);
+      setLoading(false);
+      return;
     }
     setError(null);
     setLoading(true);
@@ -182,7 +217,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [fetchProfile]);
 
   const logout = useCallback(async () => {
-    if (!supabase) return;
+    try {
+      localStorage.removeItem('lia_demo_auth');
+    } catch {}
+
+    if (!supabase) {
+      setUser(null);
+      setProfile(null);
+      return;
+    }
 
     // Log LOGOUT before session is destroyed
     void logAuditEvent({
