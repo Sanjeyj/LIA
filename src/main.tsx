@@ -24,11 +24,50 @@ const ImpactPage = lazy(() => import('./components/ImpactPage').then(m => ({ def
 const TeamPage = lazy(() => import('./components/TeamPage').then(m => ({ default: m.TeamPage })));
 const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
+import { LiquidPageTransition } from './components/LiquidPageTransition';
+import { useLocation } from 'react-router-dom';
+
 const RouteLoadingFallback = () => (
-  <div className="min-h-screen bg-[var(--lia-bg)] flex items-center justify-center p-4">
-    <div className="w-8 h-8 rounded-full border-2 border-[#D7B65A]/20 border-t-[#D7B65A] animate-spin" />
+  <div className="min-h-screen bg-[var(--lia-bg)] flex flex-col items-center justify-center p-4">
+    <div className="relative flex items-center justify-center">
+      <div className="w-10 h-10 rounded-full border-2 border-[#D7B65A]/20 border-t-[#D7B65A] animate-spin" />
+      <div className="absolute w-5 h-5 rounded-full bg-[#D7B65A]/15 animate-ping" />
+    </div>
+    <span className="mt-4 text-[11px] font-bold tracking-widest uppercase text-[#D7B65A]/80">
+      Loading
+    </span>
   </div>
 );
+
+function AppRoutes() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  const content = (
+    <Routes location={location} key={location.pathname}>
+      <Route path="/admin/*" element={<AdminApp />} />
+      <Route path="/careers" element={<CareersPage />} />
+      <Route path="/careers/:slug" element={<CareerDetailPage />} />
+      <Route path="/events" element={<EventsPage />} />
+      <Route path="/events/:slug" element={<EventDetailPage />} />
+      <Route path="/projects" element={<ProjectsPage />} />
+      <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+      <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/posts" element={<PostsPage />} />
+      <Route path="/posts/:slug" element={<PostDetailPage />} />
+      <Route path="/impact" element={<ImpactPage />} />
+      <Route path="/team" element={<TeamPage />} />
+      <Route path="/" element={<App />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+
+  if (isAdmin) {
+    return content;
+  }
+
+  return <LiquidPageTransition>{content}</LiquidPageTransition>;
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -39,22 +78,7 @@ createRoot(document.getElementById('root')!).render(
           <ThemeProvider>
             <AuthProvider>
               <Suspense fallback={<RouteLoadingFallback />}>
-                <Routes>
-                  <Route path="/admin/*" element={<AdminApp />} />
-                  <Route path="/careers" element={<CareersPage />} />
-                  <Route path="/careers/:slug" element={<CareerDetailPage />} />
-                  <Route path="/events" element={<EventsPage />} />
-                  <Route path="/events/:slug" element={<EventDetailPage />} />
-                  <Route path="/projects" element={<ProjectsPage />} />
-                  <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-                  <Route path="/gallery" element={<GalleryPage />} />
-                  <Route path="/posts" element={<PostsPage />} />
-                  <Route path="/posts/:slug" element={<PostDetailPage />} />
-                  <Route path="/impact" element={<ImpactPage />} />
-                  <Route path="/team" element={<TeamPage />} />
-                  <Route path="/" element={<App />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
+                <AppRoutes />
               </Suspense>
             </AuthProvider>
           </ThemeProvider>
@@ -63,4 +87,5 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>,
 );
+
 

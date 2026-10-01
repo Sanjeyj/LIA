@@ -87,8 +87,9 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
           rotateX,
           rotateY,
           perspective: 1200,
+          willChange: "transform",
         }}
-        className="relative w-full max-w-6xl h-auto flex items-center justify-center transition-opacity duration-500"
+        className="relative w-full max-w-6xl h-auto flex items-center justify-center transition-opacity duration-500 will-change-transform"
       >
         {/* Continuous Animated Breathing & Floating Wrapper (Guarantees movement on all devices) */}
         <motion.div
@@ -103,7 +104,8 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="relative w-full flex items-center justify-center"
+          style={{ willChange: "transform" }}
+          className="relative w-full flex items-center justify-center will-change-transform"
         >
           {/* Pulsing Specular Light Rays & Radial Aura (Gold & Electric Cyan Radiance) */}
           <motion.div
