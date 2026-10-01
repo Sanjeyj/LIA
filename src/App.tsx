@@ -16,13 +16,17 @@ import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { SEO } from "./components/SEO";
 import { CinematicBackground } from "./components/CinematicBackground";
+import { CommandPalette } from "./components/CommandPalette";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { MobileQuickBar } from "./components/MobileQuickBar";
 import { CLUB_INFO } from "./data/club";
 import { SITE_CONFIG } from "./config/site";
 
 export function App() {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Cross-page hash navigation handler (e.g. landing on /#events or /#about from other pages)
+  // Cross-page hash navigation handler
   useEffect(() => {
     if (window.location.hash) {
       const targetId = window.location.hash.replace('#', '');
@@ -45,6 +49,18 @@ export function App() {
         };
       }
     }
+  }, []);
+
+  // Ctrl+K / Cmd+K to open search palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleOpenJoinModal = () => {
@@ -122,7 +138,26 @@ export function App() {
       />
 
       {/* Navigation Header */}
-      <Navbar onOpenJoinModal={handleOpenJoinModal} />
+      <Navbar
+        onOpenJoinModal={handleOpenJoinModal}
+        onOpenSearch={() => setIsSearchOpen(true)}
+      />
+
+      {/* Global Command Palette Search (Ctrl+K) */}
+      <CommandPalette
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onOpenJoinModal={handleOpenJoinModal}
+      />
+
+      {/* Mobile App-Like Quick Nav Bar */}
+      <MobileQuickBar
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenJoinModal={handleOpenJoinModal}
+      />
+
+      {/* Scroll To Top with Progress Ring */}
+      <ScrollToTop />
 
       <main id="main-content" className="flex-grow">
         {/* Full-bleed Hero Section */}

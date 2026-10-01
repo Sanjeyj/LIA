@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight, Shield, Sun, Moon } from "lucide-react";
+import { Menu, X, ArrowUpRight, Shield, Sun, Moon, Search } from "lucide-react";
 import { CLUB_INFO } from "../data/club";
 import { useTheme } from "../contexts/ThemeContext";
 
 interface NavbarProps {
   onOpenJoinModal: () => void;
+  onOpenSearch?: () => void;
 }
 
-export const Navbar = ({ onOpenJoinModal }: NavbarProps) => {
+export const Navbar = ({ onOpenJoinModal, onOpenSearch }: NavbarProps) => {
   const location = useLocation();
   const isHomepage = location.pathname === "/";
   const [isScrolled, setIsScrolled] = useState(false);
@@ -177,6 +178,16 @@ export const Navbar = ({ onOpenJoinModal }: NavbarProps) => {
 
           {/* Right Action CTAs — desktop */}
           <div className="hidden sm:flex items-center space-x-2">
+            {/* Search button */}
+            <button
+              onClick={onOpenSearch}
+              className="p-2 rounded-full glass-subtle border border-slate-900/10 dark:border-white/12 text-slate-400 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white hover:scale-105 active:scale-95 transition-all cursor-pointer focus-ring shrink-0"
+              aria-label="Search (Ctrl+K)"
+              title="Search (Ctrl+K)"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full glass-subtle border border-slate-900/10 dark:border-white/12 text-[#B89432] dark:text-[#D7B65A] hover:scale-105 active:scale-95 transition-all cursor-pointer focus-ring shrink-0"

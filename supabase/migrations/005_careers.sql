@@ -4,7 +4,7 @@
 -- Phase 25: Public Careers + Admin CMS Opportunities Module
 -- Run this in: Supabase Dashboard → SQL Editor
 -- ============================================================
--- IMPORTANT: This migration is NON-DESTRUCTIVE.
+-- IMPORTANT: This migration is idempotent & safe to re-run.
 -- Creates the careers table, indexes, and RLS policies.
 -- ============================================================
 
@@ -66,6 +66,7 @@ CREATE INDEX IF NOT EXISTS idx_careers_featured             ON public.careers(fe
 ALTER TABLE public.careers ENABLE ROW LEVEL SECURITY;
 
 -- 2.1 Public read access for published careers that have not expired
+DROP POLICY IF EXISTS "Public can view published careers" ON public.careers;
 CREATE POLICY "Public can view published careers" ON public.careers
   FOR SELECT
   USING (
@@ -74,21 +75,25 @@ CREATE POLICY "Public can view published careers" ON public.careers
   );
 
 -- 2.2 Admins (admin + super_admin) have full management access
+DROP POLICY IF EXISTS "Admins can manage all careers" ON public.careers;
 CREATE POLICY "Admins can manage all careers" ON public.careers
   FOR ALL
   USING (public.is_admin());
 
 -- 2.3 CMS users (super_admin, admin, editor, viewer) can view all careers in CMS
+DROP POLICY IF EXISTS "CMS users can select all careers" ON public.careers;
 CREATE POLICY "CMS users can select all careers" ON public.careers
   FOR SELECT
   USING (public.is_viewer_or_above());
 
 -- 2.4 Editors can insert careers
+DROP POLICY IF EXISTS "Editors can insert careers" ON public.careers;
 CREATE POLICY "Editors can insert careers" ON public.careers
   FOR INSERT
   WITH CHECK (public.is_cms_user());
 
 -- 2.5 Editors can update careers
+DROP POLICY IF EXISTS "Editors can update careers" ON public.careers;
 CREATE POLICY "Editors can update careers" ON public.careers
   FOR UPDATE
   USING (public.is_cms_user());

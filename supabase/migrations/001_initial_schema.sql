@@ -31,6 +31,7 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS prevent_role_self_promotion_trigger ON public.profiles;
 CREATE TRIGGER prevent_role_self_promotion_trigger
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW EXECUTE FUNCTION public.prevent_role_self_promotion();
@@ -46,6 +47,7 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
@@ -301,34 +303,42 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS set_events_updated_at ON public.events;
 CREATE TRIGGER set_events_updated_at
   BEFORE UPDATE ON public.events
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_posts_updated_at ON public.posts;
 CREATE TRIGGER set_posts_updated_at
   BEFORE UPDATE ON public.posts
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_projects_updated_at ON public.projects;
 CREATE TRIGGER set_projects_updated_at
   BEFORE UPDATE ON public.projects
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_gallery_albums_updated_at ON public.gallery_albums;
 CREATE TRIGGER set_gallery_albums_updated_at
   BEFORE UPDATE ON public.gallery_albums
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_team_members_updated_at ON public.team_members;
 CREATE TRIGGER set_team_members_updated_at
   BEFORE UPDATE ON public.team_members
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_website_content_updated_at ON public.website_content;
 CREATE TRIGGER set_website_content_updated_at
   BEFORE UPDATE ON public.website_content
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_site_settings_updated_at ON public.site_settings;
 CREATE TRIGGER set_site_settings_updated_at
   BEFORE UPDATE ON public.site_settings
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
+DROP TRIGGER IF EXISTS set_profiles_updated_at ON public.profiles;
 CREATE TRIGGER set_profiles_updated_at
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();

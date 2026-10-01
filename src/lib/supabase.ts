@@ -1,28 +1,43 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+function sanitizeEnv(val: unknown): string {
+  if (typeof val !== 'string') return '';
+  return val.trim().replace(/^["']|["']$/g, '');
+}
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  if (import.meta.env.DEV) {
-    console.warn(
-      '[LIA CMS] Supabase environment variables are not configured.\n' +
-      'Copy .env.example to .env.local and fill in your Supabase credentials.\n' +
-      'The public website will use static fallback data until Supabase is configured.'
-    );
+const rawUrl = sanitizeEnv(import.meta.env.VITE_SUPABASE_URL);
+const rawAnonKey = sanitizeEnv(import.meta.env.VITE_SUPABASE_ANON_KEY);
+
+function isValidHttpUrl(string: string): boolean {
+  try {
+    const url = new URL(string);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
   }
 }
 
-// Create client only if credentials are available
-export const supabase = (supabaseUrl && supabaseAnonKey)
-  ? createClient<any>(supabaseUrl, supabaseAnonKey, {
+let client: SupabaseClient<any> | null = null;
+
+if (rawUrl && rawAnonKey && isValidHttpUrl(rawUrl)) {
+  try {
+    client = createClient<any>(rawUrl, rawAnonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
       },
-    })
-  : null;
+    });
+  } catch (err) {
+    console.error('[LIA CMS] Failed to initialize Supabase client:', err);
+    client = null;
+  }
+} else if (import.meta.env.DEV) {
+  console.warn(
+    '[LIA CMS] Supabase credentials not found or invalid.\n' +
+    'The website will use local fallback mode.'
+  );
+}
 
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
-
+export const supabase = client;
+export const isSupabaseConfigured = client !== null;
 export default supabase;

@@ -760,3 +760,387 @@
   background: radial-gradient(circle, rgba(36, 87, 214, 0.12) 0%, transparent 70%);
 }
 
+/* ============================================================
+   SMOOTH & RESPONSIVE ENHANCEMENT SYSTEM
+   Buttery animations, micro-interactions, and fluid layouts
+   ============================================================ */
+
+/* ─── GPU Acceleration for Animated Elements ─── */
+.will-change-transform {
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ─── Smooth Page Transitions ─── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Stagger Children Animation ─── */
+.stagger-children > * {
+  opacity: 0;
+  animation: staggerFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+
+@keyframes staggerFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Smooth Image Loading ─── */
+img {
+  transition: opacity 0.3s ease;
+}
+img[loading="lazy"] {
+  opacity: 0;
+}
+img.loaded,
+img:not([loading="lazy"]) {
+  opacity: 1;
+}
+
+/* ─── Enhanced Interactive States ─── */
+.interactive {
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.2s ease,
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              opacity 0.2s ease;
+}
+
+.interactive:hover {
+  transform: translateY(-2px);
+}
+
+.interactive:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ─── Fluid Card Hover System ─── */
+.card-smooth {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.card-smooth:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.4),
+              0 0 25px rgba(215, 182, 90, 0.12);
+}
+
+/* ─── Fade-in on scroll via IntersectionObserver class ─── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Smooth Focus Ring ─── */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid rgba(215, 182, 90, 0.8);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* ─── Animated Gold Shimmer for Skeleton Loading ─── */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(215, 182, 90, 0.08),
+    transparent
+  );
+  animation: shimmerSlide 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shimmerSlide {
+  0% { left: -100%; }
+  100% { left: 150%; }
+}
+
+/* ─── Floating Pulse Animation for CTAs ─── */
+@keyframes floatPulse {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 4px 20px rgba(215, 182, 90, 0.3);
+  }
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(215, 182, 90, 0.45);
+  }
+}
+
+.float-pulse {
+  animation: floatPulse 3s ease-in-out infinite;
+}
+
+/* ─── Gold Glow Pulse Hover ─── */
+.glow-gold-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-gold-hover:hover {
+  box-shadow: 0 0 20px rgba(215, 182, 90, 0.35),
+              0 0 40px rgba(215, 182, 90, 0.15);
+}
+
+/* ─── Smooth Number Transition ─── */
+.stat-counter {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  transition: color 0.3s ease;
+}
+
+/* ─── Responsive Typography Scale ─── */
+.fluid-h1 {
+  font-size: clamp(2rem, 5vw + 1rem, 5rem);
+  line-height: 1.1;
+}
+
+.fluid-h2 {
+  font-size: clamp(1.5rem, 3.5vw + 0.5rem, 3.5rem);
+  line-height: 1.15;
+}
+
+.fluid-h3 {
+  font-size: clamp(1.25rem, 2.5vw + 0.25rem, 2.25rem);
+  line-height: 1.2;
+}
+
+.fluid-body {
+  font-size: clamp(0.875rem, 1vw + 0.5rem, 1.125rem);
+  line-height: 1.7;
+}
+
+/* ─── Smooth Scroll Snap for Horizontal Carousels ─── */
+.snap-scroll-x {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.snap-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ─── Glass Morphism Enhancement ─── */
+.glass-ultra {
+  background: rgba(7, 17, 31, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Smooth Gradient Border Trick ─── */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(rgba(7, 17, 31, 1), rgba(7, 17, 31, 1)) padding-box,
+              linear-gradient(135deg, rgba(215, 182, 90, 0.6), rgba(215, 182, 90, 0.1)) border-box;
+  border: 1px solid transparent;
+}
+
+/* ─── Improved Mobile Tap Feedback ─── */
+@media (hover: none) {
+  .interactive:hover {
+    transform: none;
+  }
+  .interactive:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+    transition: transform 0.1s ease, opacity 0.1s ease;
+  }
+  .card-smooth:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* ─── Reduce Motion Preference Respect ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .float-pulse {
+    animation: none;
+  }
+
+  .fade-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Mobile Bottom Safe Area Padding ─── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+}
+
+/* ─── Smooth Content Width Transitions ─── */
+.container-smooth {
+  width: 100%;
+  max-width: min(72rem, calc(100vw - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 4vw, 2rem);
+  padding-right: clamp(1rem, 4vw, 2rem);
+}
+
+/* ─── Enhanced Button States ─── */
+.btn-gold {
+  background: linear-gradient(135deg, #D7B65A 0%, #B89432 100%);
+  color: #07111F;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  transition: filter 0.2s ease,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(215, 182, 90, 0.3);
+}
+
+.btn-gold:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(215, 182, 90, 0.45);
+}
+
+.btn-gold:active {
+  transform: translateY(0) scale(0.97);
+  filter: brightness(0.95);
+}
+
+/* ─── Section Reveal Delay Classes ─── */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* ─── Responsive Grid Fluid ─── */
+.grid-fluid-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
+}
+
+.grid-fluid-md {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1.5rem;
+}
+
+.grid-fluid-lg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: 2rem;
+}
+
+/* ─── Smooth Loading Spinner ─── */
+@keyframes smoothSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: smoothSpin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+/* ─── Text Overflow Handling ─── */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* ─── Smooth Underline Animation ─── */
+.animated-underline {
+  position: relative;
+}
+
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 1.5px;
+  background: linear-gradient(90deg, #D7B65A, #B89432);
+  border-radius: 2px;
+  transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              right 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-underline:hover::after {
+  left: 0;
+  right: 0;
+}
