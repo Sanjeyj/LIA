@@ -43,8 +43,8 @@ function AppRoutes() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
 
-  const content = (
-    <Routes location={location} key={location.pathname}>
+  const routes = (
+    <Routes>
       <Route path="/admin/*" element={<AdminApp />} />
       <Route path="/careers" element={<CareersPage />} />
       <Route path="/careers/:slug" element={<CareerDetailPage />} />
@@ -63,10 +63,10 @@ function AppRoutes() {
   );
 
   if (isAdmin) {
-    return content;
+    return routes;
   }
 
-  return <LiquidPageTransition>{content}</LiquidPageTransition>;
+  return <LiquidPageTransition>{routes}</LiquidPageTransition>;
 }
 
 createRoot(document.getElementById('root')!).render(
