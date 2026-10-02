@@ -8,6 +8,11 @@ interface FloatingParticlesProps {
   mouseRef: React.RefObject<{ x: number; y: number; targetX: number; targetY: number }>;
 }
 
+function pseudoRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
 export function FloatingParticles({ count = 35, reducedMotion = false, mouseRef }: FloatingParticlesProps) {
   const pointsRef = useRef<THREE.Points>(null);
 
@@ -15,9 +20,9 @@ export function FloatingParticles({ count = 35, reducedMotion = false, mouseRef 
     const pos = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 12;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 8;
+      pos[i * 3] = (pseudoRandom(i * 3 + 1) - 0.5) * 12;
+      pos[i * 3 + 1] = (pseudoRandom(i * 3 + 2) - 0.5) * 10;
+      pos[i * 3 + 2] = (pseudoRandom(i * 3 + 3) - 0.5) * 8;
     }
 
     return pos;

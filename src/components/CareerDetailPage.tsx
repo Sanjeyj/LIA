@@ -31,6 +31,7 @@ export const CareerDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -41,6 +42,11 @@ export const CareerDetailPage: React.FC = () => {
       try {
         const data = await getCareerBySlug(slug!);
         setCareer(data);
+        if (data?.application_deadline) {
+          setIsExpired(new Date(data.application_deadline).getTime() < Date.now() - 24 * 60 * 60 * 1000);
+        } else {
+          setIsExpired(false);
+        }
       } catch (err) {
         console.error('Failed to load career:', err);
       } finally {
@@ -49,11 +55,6 @@ export const CareerDetailPage: React.FC = () => {
     }
     void load();
   }, [slug]);
-
-  // Check expiration (deadline plus grace period of day)
-  const isExpired = career?.application_deadline
-    ? new Date(career.application_deadline).getTime() < Date.now() - 24 * 60 * 60 * 1000
-    : false;
 
   const isEligibleForJobPosting = Boolean(career && career.status === 'published' && !isExpired);
 

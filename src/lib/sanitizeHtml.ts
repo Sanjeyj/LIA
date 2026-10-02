@@ -25,7 +25,7 @@ export function sanitizeHtml(html: string): string {
       'onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'style',
     ],
     // Strictly whitelist safe URI protocols: http, https, mailto, tel
-    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i,
     FORCE_BODY: false,
   });
 }

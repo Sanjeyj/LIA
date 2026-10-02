@@ -9,11 +9,9 @@ import { getPublishedEvents } from "../services/events";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
-import { getAssetUrl } from "../utils/assetHelper";
-
 function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
   const staticMatch = EVENTS.find(
-    (ev) => ev.id === dbEvent.id || ev.slug === dbEvent.slug || ev.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
+    (e) => e.id === dbEvent.id || e.slug === dbEvent.slug || e.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
   );
   return {
     id: dbEvent.id,
@@ -22,16 +20,16 @@ function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
     slug: dbEvent.slug,
     date: dbEvent.event_date || staticMatch?.date || undefined,
     displayDate: dbEvent.display_date || dbEvent.event_date || staticMatch?.displayDate || undefined,
-    year: dbEvent.year || staticMatch?.year || new Date(dbEvent.event_date || Date.now()).getFullYear(),
+    year: dbEvent.year || (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year || new Date().getFullYear())),
     category: dbEvent.category || staticMatch?.category || "General",
-    status: (dbEvent.status === "published" ? "completed" : "upcoming") as any,
+    status: (dbEvent.status === "published" ? "completed" : (dbEvent.status || staticMatch?.status || "upcoming")) as any,
     location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
     description: dbEvent.description || staticMatch?.description || "",
     shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || "",
     image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== "")
       ? dbEvent.cover_image_url
       : (staticMatch?.image || "/assets/events/the-one.jpg"),
-    featured: Boolean(dbEvent.featured),
+    featured: Boolean(dbEvent.featured ?? staticMatch?.featured),
     organizerType: dbEvent.organizer_type || staticMatch?.organizerType || "LIA",
     liaRole: dbEvent.lia_role || staticMatch?.liaRole || "ORGANIZER",
     organizer: dbEvent.organizer || staticMatch?.organizer || undefined,
@@ -127,7 +125,7 @@ export const Events = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
               <div className="lg:col-span-7 relative h-56 sm:h-72 lg:h-96 overflow-hidden">
                 <img
-                  src={getAssetUrl(featuredEvent.image)}
+                  src={featuredEvent.image}
                   alt={featuredEvent.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -230,7 +228,7 @@ export const Events = () => {
                 >
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={getAssetUrl(ev.image || "/assets/events/the-one.jpg")}
+                      src={ev.image || "/assets/events/the-one.jpg"}
                       alt={ev.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

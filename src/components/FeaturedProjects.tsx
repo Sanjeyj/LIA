@@ -8,8 +8,6 @@ import { getPublishedProjects } from "../services/projects";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
-import { getAssetUrl } from "../utils/assetHelper";
-
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
   const staticMatch = PROJECTS.find(
     (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
@@ -130,7 +128,7 @@ export const FeaturedProjects = () => {
             >
               <div className="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
                 <img
-                  src={getAssetUrl(heroProject.image)}
+                  src={heroProject.image}
                   alt={heroProject.title}
                   loading="lazy"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -201,7 +199,7 @@ export const FeaturedProjects = () => {
                 >
                   <div className="relative h-44 sm:h-48 overflow-hidden">
                     <img
-                      src={getAssetUrl(proj.image)}
+                      src={proj.image}
                       alt={proj.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -250,7 +248,7 @@ export const FeaturedProjects = () => {
               <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                 <div className="lg:col-span-6 relative h-64 lg:h-80 overflow-hidden">
                   <img
-                    src={getAssetUrl(wideProject.image)}
+                    src={wideProject.image}
                     alt={wideProject.title}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -334,7 +332,7 @@ export const FeaturedProjects = () => {
               {/* Modal Banner */}
               <div className="relative h-44 sm:h-60 md:h-72 w-full shrink-0">
                 <img
-                  src={getAssetUrl(selectedProject.image)}
+                  src={selectedProject.image}
                   alt={selectedProject.title}
                   className="w-full h-full object-cover"
                 />

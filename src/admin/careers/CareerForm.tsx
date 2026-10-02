@@ -48,6 +48,30 @@ import type {
 import { LoadingSpinner } from '../shared/LoadingSpinner';
 import { showToast } from '../shared/Toast';
 
+const INITIAL_CAREER_FORM = {
+  title: '',
+  slug: '',
+  organization_name: '',
+  organization_website: '',
+  organization_logo_url: '',
+  opportunity_type: 'job' as CareerOpportunityType,
+  work_mode: 'on_site' as CareerWorkMode,
+  location: '',
+  experience_level: 'entry_level' as CareerExperienceLevel,
+  remuneration: '',
+  application_deadline: '',
+  application_url: '',
+  application_label: 'Apply Now',
+  responsibilities: '',
+  requirements: '',
+  preferred_skills: '',
+  benefits: '',
+  additional_information: '',
+  contact_email: '',
+  status: 'draft' as CareerStatus,
+  featured: false,
+};
+
 export const CareerForm: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const isEdit = Boolean(id);
@@ -60,32 +84,10 @@ export const CareerForm: React.FC = () => {
   const [slugError, setSlugError] = useState<string | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    organization_name: '',
-    organization_website: '',
-    organization_logo_url: '',
-    opportunity_type: 'job' as CareerOpportunityType,
-    work_mode: 'on_site' as CareerWorkMode,
-    location: '',
-    experience_level: 'entry_level' as CareerExperienceLevel,
-    remuneration: '',
-    application_deadline: '',
-    application_url: '',
-    application_label: 'Apply Now',
-    responsibilities: '',
-    requirements: '',
-    preferred_skills: '',
-    benefits: '',
-    additional_information: '',
-    contact_email: '',
-    status: 'draft' as CareerStatus,
-    featured: false,
-  });
+  const [formData, setFormData] = useState(INITIAL_CAREER_FORM);
 
   // Unsaved changes tracking
-  const savedFormRef = useRef<typeof formData | null>(null);
+  const savedFormRef = useRef<typeof formData | null>(isEdit ? null : INITIAL_CAREER_FORM);
   const [isDirty, setIsDirty] = useState(false);
 
   // Tiptap for description ONLY
@@ -209,9 +211,6 @@ export const CareerForm: React.FC = () => {
   useEffect(() => {
     if (isEdit && id) {
       void loadCareer(id);
-    } else {
-      // For new records, mark the initial empty state as "saved"
-      savedFormRef.current = formData;
     }
   }, [id, isEdit, loadCareer]);
 

@@ -6,7 +6,7 @@ import { CLUB_INFO } from '../data/club';
  */
 export const SITE_URL = (
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SITE_URL) ||
-  'https://lia-website-nu.vercel.app'
+  'https://lia-website-six.vercel.app'
 ).replace(/\/+$/, '');
 
 export const SITE_CONFIG = {

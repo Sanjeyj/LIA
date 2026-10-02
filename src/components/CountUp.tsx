@@ -15,7 +15,7 @@ export const CountUp: React.FC<CountUpProps> = ({
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const shouldReduceMotion = useReducedMotion();
-  const [displayValue, setDisplayValue] = useState("0");
+  const [displayValue, setDisplayValue] = useState(() => (shouldReduceMotion ? value : "0"));
 
   const match = value.match(/^([^\d]*)([\d,]+)([^\d]*)$/);
   const prefix = match ? match[1] : "";
@@ -26,7 +26,6 @@ export const CountUp: React.FC<CountUpProps> = ({
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      setDisplayValue(value);
       return;
     }
 

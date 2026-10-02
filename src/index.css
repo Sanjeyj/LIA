@@ -317,61 +317,57 @@
 }
 
 @layer components {
-  /* ─── 5-Tier Liquid Glass Material Hierarchy (Performance-Optimized) ─── */
+  /* ─── 5-Tier Liquid Glass Material Hierarchy ─── */
   
   /* Tier 1: Floating Navigation Glass Capsule */
   .glass-nav {
     background: var(--glass-nav-bg);
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--glass-border-subtle);
     box-shadow: 
       var(--glass-highlight-specular),
       var(--glass-shadow);
-    transform: translateZ(0);
   }
 
   /* Tier 2: Primary Content Cards & High-Impact Surfaces */
   .glass-primary {
     background: var(--glass-primary-bg);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
     border: 1px solid var(--glass-border-subtle);
     box-shadow: 
       var(--glass-highlight-specular),
       var(--glass-shadow);
-    transform: translateZ(0);
   }
 
   /* Tier 3: Secondary Supporting Cards */
   .glass-secondary {
     background: var(--glass-secondary-bg);
-    backdrop-filter: blur(10px) saturate(130%);
-    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
     border: 1px solid var(--glass-border-subtle);
     box-shadow: 
       var(--glass-highlight-specular),
       var(--glass-shadow);
-    transform: translateZ(0);
   }
 
   /* Tier 4: Floating Controls, Modals, Lightboxes & Dropdowns */
   .glass-floating {
     background: var(--glass-floating-bg);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(36px) saturate(200%);
+    -webkit-backdrop-filter: blur(36px) saturate(200%);
     border: 1px solid var(--glass-border-subtle);
     box-shadow: 
       var(--glass-highlight-specular),
       var(--glass-shadow);
-    transform: translateZ(0);
   }
 
   /* Tier 5: Subtle Background Panels & Pill Containers */
   .glass-subtle {
     background: var(--glass-subtle-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border-subtle);
   }
 
@@ -558,15 +554,18 @@
 }
 
 .bg-radial-navy {
-  background: radial-gradient(circle, rgba(23, 78, 166, 0.22) 0%, rgba(23, 78, 166, 0.05) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(23, 78, 166, 0.22) 0%, transparent 70%);
+  filter: blur(100px);
 }
 
 .bg-radial-gold {
-  background: radial-gradient(circle, rgba(215, 182, 90, 0.16) 0%, rgba(215, 182, 90, 0.04) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(215, 182, 90, 0.16) 0%, transparent 70%);
+  filter: blur(110px);
 }
 
 .bg-radial-royal {
-  background: radial-gradient(circle, rgba(36, 87, 214, 0.16) 0%, rgba(36, 87, 214, 0.04) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(36, 87, 214, 0.16) 0%, transparent 70%);
+  filter: blur(120px);
 }
 
 .bg-radial-vignette {

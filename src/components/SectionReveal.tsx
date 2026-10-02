@@ -18,15 +18,14 @@ export const SectionReveal: React.FC<SectionRevealProps> = ({
   return (
     <motion.div
       id={id}
-      initial={{ opacity: 0, y: 18, scale: 0.99 }}
+      initial={{ opacity: 0, y: 24, scale: 0.985 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-40px" }}
+      viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.45,
+        duration: 0.7,
         delay,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.22, 1, 0.36, 1],
       }}
-      style={{ willChange: "transform, opacity" }}
       className={className}
     >
       {children}

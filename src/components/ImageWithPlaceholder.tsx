@@ -41,7 +41,13 @@ export const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
-        onError={() => setIsLoaded(true)}
+        onError={(e) => {
+          setIsLoaded(true);
+          const target = e.currentTarget as HTMLImageElement;
+          if (!target.src.includes('/assets/events/the-one.jpg')) {
+            target.src = '/assets/events/the-one.jpg';
+          }
+        }}
         className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] ${
           isLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}

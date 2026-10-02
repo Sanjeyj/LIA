@@ -191,6 +191,7 @@ export const GalleryManager: React.FC = () => {
       }
       loadImages();
     } catch (err: any) {
+      console.error('Failed to register uploaded images in database:', err);
       showToast.error('Failed to register uploaded images in database');
     }
   };
@@ -225,6 +226,7 @@ export const GalleryManager: React.FC = () => {
       showToast.success(image.featured ? 'Removed from featured' : 'Marked as featured');
       loadImages();
     } catch (err: any) {
+      console.error('Failed to update featured status:', err);
       showToast.error('Failed to update featured status');
     }
   };

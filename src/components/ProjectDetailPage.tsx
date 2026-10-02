@@ -20,7 +20,6 @@ import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { SITE_CONFIG, getAbsoluteImageUrl } from '../config/site';
-import { getAssetUrl } from '../utils/assetHelper';
 
 function mapDbProjectToPublicProject(dbProj: any): PublicProject {
   const staticMatch = PROJECTS.find(
@@ -31,14 +30,14 @@ function mapDbProjectToPublicProject(dbProj: any): PublicProject {
     title: dbProj.title,
     slug: dbProj.slug,
     category: dbProj.category || staticMatch?.category || 'Community Service',
-    date: dbProj.project_date || `${dbProj.year || new Date().getFullYear()}`,
-    year: dbProj.year || new Date().getFullYear(),
+    date: dbProj.project_date || `${dbProj.year || (staticMatch?.year || new Date().getFullYear())}`,
+    year: dbProj.year || staticMatch?.year || new Date().getFullYear(),
     description: dbProj.description || staticMatch?.description || '',
     shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || '',
     image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '')
       ? dbProj.cover_image_url
       : (staticMatch?.image || '/assets/events/football.jpg'),
-    featured: Boolean(dbProj.featured),
+    featured: Boolean(dbProj.featured ?? staticMatch?.featured),
     impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
     collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
     source: dbProj.source_platform
@@ -214,7 +213,7 @@ export const ProjectDetailPage: React.FC = () => {
                 {project.image && (
                   <div className="relative h-64 sm:h-96 w-full overflow-hidden">
                     <img
-                      src={getAssetUrl(project.image)}
+                      src={project.image}
                       alt={project.title}
                       className="w-full h-full object-cover"
                     />
@@ -390,7 +389,7 @@ export const ProjectDetailPage: React.FC = () => {
                   >
                     <div className="relative h-36 overflow-hidden">
                       <img
-                        src={getAssetUrl(rel.image || '/assets/events/football.jpg')}
+                        src={rel.image || '/assets/events/the-one.jpg'}
                         alt={rel.title}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

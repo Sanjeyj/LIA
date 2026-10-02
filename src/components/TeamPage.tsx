@@ -36,38 +36,26 @@ import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { getCanonicalUrl } from '../config/site';
-import { getAssetUrl } from '../utils/assetHelper';
 
-function normalize(s?: string) {
-  return (s || "")
-    .toLowerCase()
-    .replace(/^rtr\.?\s*/i, "")
-    .replace(/^ipp\.?\s*/i, "")
-    .replace(/^pp\.?\s*/i, "")
-    .replace(/[^a-z0-9]/g, "")
-    .trim();
-}
+function normalize(s?: string) { return (s || '').toLowerCase().replace(/rtr\.?\s*/i, '').replace(/ipp\.?\s*/i, '').replace(/pp\.?\s*/i, '').trim(); }
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
   const staticMatch = TEAM_MEMBERS.find(
     (m) =>
       m.id === dbMember.id ||
-      normalize(m.name) === normalize(dbMember.name) ||
-      (m.name && dbMember.name && normalize(m.name).includes(normalize(dbMember.name))) ||
-      (m.name && dbMember.name && normalize(dbMember.name).includes(normalize(m.name)))
+      normalize(m.name) === normalize(dbMember.name)
   );
   return {
     id: dbMember.id,
     name: dbMember.name,
     position: dbMember.designation || staticMatch?.position,
     term: dbMember.term || '2026–27',
-    // Prefer static image if DB has null/empty
     image: (dbMember.profile_image_url && dbMember.profile_image_url.trim() !== '')
       ? dbMember.profile_image_url
-      : (staticMatch?.image || undefined),
+      : staticMatch?.image,
     letterImage: (dbMember.letter_image_url && dbMember.letter_image_url.trim() !== '')
       ? dbMember.letter_image_url
-      : (staticMatch?.letterImage || undefined),
+      : staticMatch?.letterImage,
     bio: dbMember.bio || staticMatch?.bio || undefined,
     collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
     department: dbMember.department || staticMatch?.department || undefined,
@@ -145,7 +133,7 @@ export const TeamPage: React.FC = () => {
       } else if (activeFilter === 'PROJECT_LEADS') {
         categoryMatch = roleCat === 'PROJECT_LEAD' || pos.includes('chair') || pos.includes('lead');
       } else if (activeFilter === 'MEMBERS') {
-        categoryMatch = roleCat === 'MEMBER' || (!Boolean(m.isExecutive) && !pos.includes('advisor') && !pos.includes('president'));
+        categoryMatch = roleCat === 'MEMBER' || (!m.isExecutive && !pos.includes('advisor') && !pos.includes('president'));
       }
 
       const searchMatch =
@@ -572,7 +560,7 @@ export const TeamPage: React.FC = () => {
               <div className="overflow-y-auto mt-3 p-3 bg-[#040812] rounded-2xl flex items-center justify-center border border-white/10">
                 {showLetterModal.letterImage && (
                   <img
-                    src={getAssetUrl(showLetterModal.letterImage)}
+                    src={showLetterModal.letterImage}
                     alt={`Appointment letter of ${showLetterModal.name}`}
                     loading="lazy"
                     className="max-h-[65vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"

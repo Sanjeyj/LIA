@@ -21,7 +21,6 @@ import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { SITE_CONFIG, getAbsoluteImageUrl } from '../config/site';
-import { getAssetUrl } from '../utils/assetHelper';
 
 function mapDbEventToPublicEvent(dbEvent: any): PublicEvent {
   const staticMatch = EVENTS.find(
@@ -34,16 +33,16 @@ function mapDbEventToPublicEvent(dbEvent: any): PublicEvent {
     slug: dbEvent.slug,
     date: dbEvent.event_date || staticMatch?.date || undefined,
     displayDate: dbEvent.display_date || dbEvent.event_date || staticMatch?.displayDate || undefined,
-    year: dbEvent.year || (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : staticMatch?.year || new Date().getFullYear()),
+    year: dbEvent.year || (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year || new Date().getFullYear())),
     category: dbEvent.category || staticMatch?.category || 'General',
-    status: (dbEvent.status === 'published' ? 'completed' : 'upcoming') as any,
+    status: (dbEvent.status === 'published' ? 'completed' : (dbEvent.status || staticMatch?.status || 'upcoming')) as any,
     location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
     description: dbEvent.description || staticMatch?.description || '',
     shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || '',
     image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== '')
       ? dbEvent.cover_image_url
       : (staticMatch?.image || '/assets/events/the-one.jpg'),
-    featured: Boolean(dbEvent.featured),
+    featured: Boolean(dbEvent.featured ?? staticMatch?.featured),
     organizerType: dbEvent.organizer_type || staticMatch?.organizerType || 'LIA',
     liaRole: dbEvent.lia_role || staticMatch?.liaRole || 'ORGANIZER',
     organizer: dbEvent.organizer || staticMatch?.organizer || undefined,
@@ -257,7 +256,7 @@ export const EventDetailPage: React.FC = () => {
                 {event.image && (
                   <div className="relative h-64 sm:h-96 w-full overflow-hidden">
                     <img
-                      src={getAssetUrl(event.image)}
+                      src={event.image}
                       alt={event.title}
                       className="w-full h-full object-cover"
                     />
@@ -460,7 +459,7 @@ export const EventDetailPage: React.FC = () => {
                   >
                     <div className="relative h-36 overflow-hidden">
                       <img
-                        src={getAssetUrl(rel.image || '/assets/events/the-one.jpg')}
+                        src={rel.image || '/assets/events/the-one.jpg'}
                         alt={rel.title}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

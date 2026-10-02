@@ -21,7 +21,6 @@ import { getPublishedGalleryImages } from "../services/gallery";
 import type { GalleryImage } from "../types/supabase";
 import { GALLERY_ITEMS } from "../data/gallery";
 import type { GalleryItem } from "../types";
-import { getAssetUrl } from "../utils/assetHelper";
 
 function staticToGalleryImage(s: GalleryItem): GalleryImage {
   return {
@@ -36,6 +35,19 @@ function staticToGalleryImage(s: GalleryItem): GalleryImage {
     featured: false,
     sort_order: 0,
     created_at: "",
+  };
+}
+
+function normalizeGalleryImage(img: GalleryImage): GalleryImage {
+  if (img.image_url && img.image_url.trim() !== '') {
+    return img;
+  }
+  const match = GALLERY_ITEMS.find(
+    (g) => g.id === img.id || g.title?.toLowerCase().trim() === img.title?.toLowerCase().trim()
+  );
+  return {
+    ...img,
+    image_url: match?.image || '/assets/events/the-one.jpg',
   };
 }
 
@@ -113,10 +125,13 @@ const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) =>
       >
         <div className="relative rounded-2xl overflow-hidden w-full max-h-[72vh] border border-white/20 shadow-2xl bg-black">
           <img
-            src={getAssetUrl(photo.image_url)}
+            src={photo.image_url}
             alt={photo.title ?? "Gallery photo"}
             className="max-h-[72vh] w-full object-contain"
             loading="lazy"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/assets/events/the-one.jpg";
+            }}
           />
         </div>
         <div className="mt-4 text-center max-w-2xl w-full text-white space-y-1 px-4">
@@ -168,9 +183,12 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onOpen }) => {
             className={`group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 bg-[#07111F] ${isLarge ? "sm:col-span-2 aspect-[16/9]" : "aspect-[16/9]"}`}
           >
             <img
-              src={getAssetUrl(photo.image_url)}
+              src={photo.image_url}
               alt={photo.title ?? "Gallery photo"}
               loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/assets/events/the-one.jpg";
+              }}
               className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07111F] via-[#07111F]/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
@@ -223,17 +241,15 @@ export const GalleryPage = () => {
         const albumData = await getPublishedAlbumsWithImages();
         const flatImages = await getPublishedGalleryImages();
         if (!mounted) return;
-        const validAlbums = (albumData || []).filter(
-          (a) => (a.images && a.images.length > 0) || (a.cover_image_url && a.cover_image_url.trim() !== "")
-        );
-        const validFlatImages = (flatImages || []).filter(
-          (img) => img.image_url && img.image_url.trim() !== ""
-        );
-        if (validAlbums.length > 0) {
-          setAlbums(validAlbums);
-        }
-        if (validFlatImages.length > 0) {
-          setAllPhotos(validFlatImages);
+        const normalizedAlbums = albumData.map((album) => ({
+          ...album,
+          images: album.images.map(normalizeGalleryImage),
+        }));
+        const normalizedFlat = flatImages.map(normalizeGalleryImage);
+        const hasDatabaseContent = normalizedAlbums.length > 0 || normalizedFlat.length > 0;
+        if (hasDatabaseContent) {
+          setAlbums(normalizedAlbums);
+          setAllPhotos(normalizedFlat.length > 0 ? normalizedFlat : GALLERY_ITEMS.map(staticToGalleryImage));
         } else {
           setAllPhotos(GALLERY_ITEMS.map(staticToGalleryImage));
         }
@@ -369,7 +385,7 @@ export const GalleryPage = () => {
                           className="group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 aspect-[16/9] bg-[#07111F]"
                         >
                           {cover ? (
-                            <img src={getAssetUrl(cover)} alt={album.name} loading="lazy" className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
+                            <img src={cover} alt={album.name} loading="lazy" className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#10233D] to-[#07111F] flex items-center justify-center">
                               <ImageIcon className="w-12 h-12 text-white/10" />

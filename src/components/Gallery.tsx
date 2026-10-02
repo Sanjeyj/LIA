@@ -8,8 +8,6 @@ import { getPublishedGalleryImages } from "../services/gallery";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
-import { getAssetUrl } from "../utils/assetHelper";
-
 function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
   const staticMatch = GALLERY_ITEMS.find(
     (g) => g.id === dbItem.id || g.title?.toLowerCase().trim() === dbItem.title?.toLowerCase().trim()
@@ -38,13 +36,7 @@ export const Gallery = () => {
     getPublishedGalleryImages()
       .then((data) => {
         if (isMounted && data && data.length > 0) {
-          // Only override if Supabase items have actual image URLs
-          const itemsWithImages = data.map(mapSupabaseGalleryToPublic).filter(
-            (item) => item.image && item.image !== ''
-          );
-          if (itemsWithImages.length > 0) {
-            setGalleryList(itemsWithImages);
-          }
+          setGalleryList(data.map(mapSupabaseGalleryToPublic));
         }
       })
       .catch((err) => {
@@ -147,7 +139,7 @@ export const Gallery = () => {
                   }`}
                 >
                   <img
-                    src={getAssetUrl(item.image)}
+                    src={item.image}
                     alt={item.title}
                     loading="lazy"
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -259,7 +251,7 @@ export const Gallery = () => {
             >
               <div className="relative rounded-2xl overflow-hidden max-h-[75vh] w-auto border border-white/20 shadow-2xl bg-black">
                 <img
-                  src={getAssetUrl(filteredItems[selectedPhotoIndex].image)}
+                  src={filteredItems[selectedPhotoIndex].image}
                   alt={filteredItems[selectedPhotoIndex].title}
                   className="max-h-[75vh] w-full object-contain"
                 />
