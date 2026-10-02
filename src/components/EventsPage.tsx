@@ -541,7 +541,8 @@ export const EventsPage: React.FC = () => {
                       <img
                         src={ev.image || '/assets/events/the-one.jpg'}
                         alt={ev.title}
-                        loading="lazy"
+                        loading="eager"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-transparent to-transparent" />

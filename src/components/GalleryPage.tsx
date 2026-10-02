@@ -185,7 +185,8 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onOpen }) => {
             <img
               src={photo.image_url}
               alt={photo.title ?? "Gallery photo"}
-              loading="lazy"
+              loading="eager"
+              decoding="async"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "/assets/events/the-one.jpg";
               }}

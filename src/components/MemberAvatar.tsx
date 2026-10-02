@@ -42,7 +42,8 @@ export const MemberAvatar: React.FC<MemberAvatarProps> = ({
           alt={`Photo of ${name}`}
           className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
           onError={() => setImageFailed(true)}
-          loading="lazy"
+          loading="eager"
+          decoding="async"
         />
       </div>
     );

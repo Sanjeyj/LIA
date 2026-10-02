@@ -257,7 +257,8 @@ export const ProjectsPage: React.FC = () => {
                         <img
                           src={proj.image || '/assets/events/the-one.jpg'}
                           alt={proj.title}
-                          loading="lazy"
+                          loading="eager"
+                          decoding="async"
                           className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-[#0B1728]/30 to-transparent" />
