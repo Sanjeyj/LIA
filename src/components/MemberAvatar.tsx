@@ -34,9 +34,12 @@ export const MemberAvatar: React.FC<MemberAvatarProps> = ({
 
   const containerSize = sizeClasses[size] || sizeClasses.md;
 
+  const isCircle = className.includes('rounded-full');
+  const roundedClass = isCircle ? 'rounded-full' : 'rounded-2xl';
+
   if (src && !imageFailed) {
     return (
-      <div className={`relative overflow-hidden rounded-2xl bg-[#0B1728] border border-white/10 shadow-lg ${containerSize} ${className}`}>
+      <div className={`relative overflow-hidden ${roundedClass} bg-[#0B1728] border border-white/10 shadow-lg ${containerSize} ${className}`}>
         <img
           src={src}
           alt={`Photo of ${name}`}
@@ -51,11 +54,11 @@ export const MemberAvatar: React.FC<MemberAvatarProps> = ({
 
   return (
     <div
-      className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-[#0B1728] via-[#10233D] to-[#1A365D] border border-[#D7B65A]/30 shadow-lg text-[#E8D89A] font-heading font-extrabold tracking-wider select-none ${containerSize} ${className}`}
+      className={`relative flex items-center justify-center ${roundedClass} bg-gradient-to-br from-[#0B1728] via-[#10233D] to-[#1A365D] border border-[#D7B65A]/30 shadow-lg text-[#E8D89A] font-heading font-extrabold tracking-wider select-none ${containerSize} ${className}`}
       title={name}
       aria-label={`Avatar for ${name}`}
     >
-      <div className="absolute inset-0 bg-[#D7B65A]/5 rounded-2xl blur-sm" />
+      <div className={`absolute inset-0 bg-[#D7B65A]/5 ${roundedClass} blur-sm`} />
       <span className="relative z-10 drop-shadow-md">{initials}</span>
     </div>
   );

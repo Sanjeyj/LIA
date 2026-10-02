@@ -151,6 +151,8 @@ export const InteractiveMaayonBg: React.FC<InteractiveMaayonBgProps> = ({
               }}
               src="/assets/logos/maayon-banner.jpg"
               alt="MAAYON official 3D logo animated glowing background motion"
+              loading="eager"
+              decoding="async"
               className="w-full h-auto object-contain rounded-2xl transition-all duration-500"
               style={{
                 opacity: opacity,

@@ -46,8 +46,11 @@ export const MaayonSection = () => {
                   <img
                     src="/assets/logos/maayon-official.jpg"
                     alt="MAAYON 2026-27 presidential theme official image"
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/assets/logos/maayon-theme.png";
+                    }}
                     className="w-full h-auto max-h-[360px] sm:max-h-[440px] object-contain rounded-xl sm:rounded-2xl filter drop-shadow-md transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
@@ -67,7 +70,7 @@ export const MaayonSection = () => {
                     src="/assets/members/hariharan.jpg"
                     name={CLUB_INFO.president.name}
                     size="sm"
-                    className="w-7 h-7 rounded-full border border-[#C9A961]/40 shrink-0"
+                    className="!w-9 !h-9 rounded-full border border-[#C9A961]/40 shrink-0"
                   />
                   <div className="text-left">
                     <div className="text-[11px] font-bold text-[#F5F1E8] leading-tight">
