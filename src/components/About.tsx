@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   Users,
   Award,
@@ -45,12 +46,18 @@ const pillars = [
 
 export const About = () => {
   return (
-    <Section id="about" className="border-t border-white/5 bg-[#07111F]">
+    <Section id="about" className="border-t border-white/5 bg-[#07111F] overflow-hidden">
       <SectionReveal>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
           {/* Left Column: Editorial Display Typography */}
-          <div className="lg:col-span-5 space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 space-y-6"
+          >
             <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full border border-[#C9A961]/30 bg-[#0E1F38] text-xs font-semibold text-[#C9A961] uppercase tracking-wider">
               <span>About Our Movement</span>
             </div>
@@ -66,7 +73,8 @@ export const About = () => {
                 <img
                   src="/assets/logos/lia-shield.png"
                   alt="Rotaract Club of Lead India Ahead official shield crest"
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="h-12 sm:h-16 w-auto object-contain shrink-0"
                 />
                 <div>
@@ -106,10 +114,16 @@ export const About = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Narrative & Pillars */}
-          <div className="lg:col-span-7 space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-7 space-y-8"
+          >
             <div className="space-y-4 text-[#8E9DAE] text-base sm:text-lg leading-relaxed font-normal">
               <p className="text-[#F5F1E8] font-medium text-lg sm:text-xl leading-snug">
                 Since 2012, the Rotaract Club of Lead India Ahead has brought together passionate young changemakers
@@ -128,8 +142,12 @@ export const About = () => {
               {pillars.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div
+                  <motion.div
                     key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: idx * 0.08 }}
                     className="p-5 rounded-xl border border-white/10 bg-[#0E1F38] hover:border-[#C9A961]/40 transition-colors shadow-sm flex flex-col justify-between"
                   >
                     <div>
@@ -139,7 +157,7 @@ export const About = () => {
                       <h3 className="font-display font-serif font-bold text-[#F5F1E8] text-base mb-1.5">{item.title}</h3>
                       <p className="text-xs text-[#8E9DAE] leading-relaxed font-normal">{item.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -153,14 +171,19 @@ export const About = () => {
                 {values.map((v, idx) => {
                   const Icon = v.icon;
                   return (
-                    <div
+                    <motion.div
                       key={idx}
-                      className="p-3 rounded-xl border border-white/10 bg-[#0E1F38] flex flex-col gap-1.5 group shadow-sm hover:border-[#C9A961]/30 transition-colors"
+                      initial={{ opacity: 0, scale: 0.92 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.35, delay: idx * 0.05 }}
+                      whileHover={{ y: -3, scale: 1.02 }}
+                      className="p-3 rounded-xl border border-white/10 bg-[#0E1F38] flex flex-col gap-1.5 group shadow-sm hover:border-[#C9A961]/40 transition-colors cursor-default"
                     >
                       <Icon className="w-4 h-4 text-[#C9A961] group-hover:scale-110 transition-transform" aria-hidden="true" />
                       <div className="text-xs font-bold text-[#F5F1E8]">{v.label}</div>
                       <p className="text-[10px] text-[#8E9DAE] leading-snug hidden sm:block font-normal">{v.desc}</p>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -182,7 +205,7 @@ export const About = () => {
                 <span>Active Since 2012</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </SectionReveal>

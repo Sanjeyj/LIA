@@ -39,8 +39,34 @@ export const Hero: React.FC<HeroProps> = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.18,
-        delayChildren: shouldReduceMotion ? 0 : 0.1,
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
+        delayChildren: shouldReduceMotion ? 0 : 0.05,
+      },
+    },
+  };
+
+  const logoVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: -20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.8,
+        ease: [0.16, 1, 0.3, 1] as const,
+      },
+    },
+  };
+
+  const lineVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 35, filter: "blur(4px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.75,
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     },
   };
@@ -92,7 +118,7 @@ export const Hero: React.FC<HeroProps> = ({
           className="flex flex-col items-center w-full"
         >
           {/* 1. LIA Shield Crest Logo */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <motion.div variants={logoVariants} className="mb-6">
             <div className="relative p-3 sm:p-4 rounded-2xl bg-[#0E1F38] border border-white/10 shadow-2xl backdrop-blur-md">
               <img
                 src="/assets/logos/lia-shield.png"
@@ -105,17 +131,17 @@ export const Hero: React.FC<HeroProps> = ({
           </motion.div>
 
           {/* 2. Tagline as Large Serif Headline in Sequence */}
-          <motion.div variants={itemVariants} className="space-y-1 sm:space-y-2 mb-6">
-            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+          <div className="space-y-1 sm:space-y-2 mb-6">
+            <motion.h1 variants={lineVariants} className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
               Together, We <span className="text-[#C9A961]">Lead.</span>
-            </h1>
-            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+            </motion.h1>
+            <motion.h1 variants={lineVariants} className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
               Together, We <span className="text-[#C9A961]">Serve.</span>
-            </h1>
-            <h1 className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
+            </motion.h1>
+            <motion.h1 variants={lineVariants} className="font-display font-serif font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F1E8] tracking-tight leading-tight">
               Together, We <span className="text-[#C9A961]">Grow.</span>
-            </h1>
-          </motion.div>
+            </motion.h1>
+          </div>
 
           {/* 3. Short Sub-line: Club Name & Rotary Year */}
           <motion.div variants={itemVariants} className="mb-8">

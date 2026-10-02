@@ -1,12 +1,28 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, X, GraduationCap, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, X, GraduationCap, ShieldCheck, ArrowRight, Sparkles, Building } from "lucide-react";
 import { TEAM_MEMBERS } from "../data/team";
 import type { TeamMember } from "../types";
 import { getPublishedTeamMembers } from "../services/team";
 import { MemberAvatar } from "./MemberAvatar";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
+
+const InstagramIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+const LinkedinIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
 
 function normalize(s?: string) { return (s || "").toLowerCase().replace(/rtr\.?\s*/i, "").replace(/ipp\.?\s*/i, "").replace(/pp\.?\s*/i, "").trim(); }
 
@@ -37,6 +53,7 @@ export const Leadership = () => {
   const [membersList, setMembersList] = useState<TeamMember[]>(TEAM_MEMBERS);
   const [activeTab, setActiveTab] = useState<"EXECUTIVE" | "ALL">("EXECUTIVE");
   const [selectedLetter, setSelectedLetter] = useState<TeamMember | null>(null);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -54,15 +71,16 @@ export const Leadership = () => {
     };
   }, []);
 
-  // Handle escape key and body scroll lock for appointment letter modal
+  // Handle escape key and body scroll lock for modals
   useEffect(() => {
-    if (!selectedLetter) return;
+    if (!selectedLetter && !selectedMember) return;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setSelectedLetter(null);
+        setSelectedMember(null);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -70,7 +88,7 @@ export const Leadership = () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedLetter]);
+  }, [selectedLetter, selectedMember]);
 
   const displayedMembers = activeTab === "EXECUTIVE"
     ? membersList.filter((m) => m.isExecutive)
@@ -129,13 +147,30 @@ export const Leadership = () => {
             className="mb-12 sm:mb-16 glass-primary rounded-3xl p-6 sm:p-10 border border-[#D7B65A]/45 shadow-2xl relative overflow-hidden glass-shine"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-center">
-              <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 sm:p-8 bg-[#07111F]/90 rounded-2xl border border-[#D7B65A]/30 shadow-inner">
-                <MemberAvatar
-                  src="/assets/members/hariharan.jpg"
-                  name={president.name}
-                  size="xl"
-                  className="mb-4 sm:mb-5 shadow-2xl ring-4 ring-[#D7B65A]/30"
-                />
+              <div 
+                onClick={() => setSelectedMember(president)}
+                className="lg:col-span-5 flex flex-col items-center justify-center p-6 sm:p-8 bg-[#07111F]/90 rounded-2xl border border-[#D7B65A]/30 shadow-inner cursor-pointer group/pres transition-all hover:border-[#D7B65A]/70 hover:bg-[#07111F]"
+                role="button"
+                tabIndex={0}
+                aria-label={`View details of ${president.name}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedMember(president);
+                  }
+                }}
+              >
+                <div className="relative group-hover/pres:scale-105 transition-transform duration-300">
+                  <MemberAvatar
+                    src="/assets/members/hariharan.jpg"
+                    name={president.name}
+                    size="xl"
+                    className="mb-4 sm:mb-5 shadow-2xl ring-4 ring-[#D7B65A]/30"
+                  />
+                  <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover/pres:opacity-100 transition-opacity flex items-center justify-center mb-4 sm:mb-5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#E8D89A] bg-[#07111F]/90 px-3 py-1 rounded-full border border-[#D7B65A]/40 backdrop-blur-sm">View Profile</span>
+                  </div>
+                </div>
 
                 <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-white text-center">
                   {president.name}
@@ -190,20 +225,35 @@ export const Leadership = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.35 }}
-                className="glass-secondary glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between group relative glass-shine"
+                onClick={() => setSelectedMember(member)}
+                role="button"
+                tabIndex={0}
+                aria-label={`View details of ${member.name}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedMember(member);
+                  }
+                }}
+                className="glass-secondary glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between group relative glass-shine cursor-pointer"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <MemberAvatar
-                      src={member.image}
-                      name={member.name}
-                      size="md"
-                      className="shrink-0 group-hover:scale-105 transition-transform"
-                    />
+                    <div className="relative group-hover:scale-105 transition-transform">
+                      <MemberAvatar
+                        src={member.image}
+                        name={member.name}
+                        size="md"
+                        className="shrink-0 shadow-lg"
+                      />
+                    </div>
 
                     {member.letterImage && (
                       <button
-                        onClick={() => setSelectedLetter(member)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLetter(member);
+                        }}
                         className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#E8D89A] bg-[#D7B65A]/15 border border-[#D7B65A]/40 hover:bg-[#D7B65A] hover:text-[#040812] transition-all flex items-center space-x-1 focus-ring cursor-pointer"
                         title="View Official Appointment Letter"
                       >
@@ -250,6 +300,144 @@ export const Leadership = () => {
         </div>
 
         </SectionReveal>
+
+      {/* Member Profile Detail Modal with Big Picture */}
+      <AnimatePresence>
+        {selectedMember && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="leadership-member-modal-title"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedMember(null)}
+              className="fixed inset-0 bg-black/85 backdrop-blur-2xl"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="relative max-w-lg w-full glass-floating rounded-3xl overflow-hidden border border-white/20 shadow-2xl z-10 p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setSelectedMember(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors focus-ring cursor-pointer"
+                aria-label="Close profile modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                {/* Big Image Display */}
+                <div className="relative inline-block mb-4">
+                  {selectedMember.image ? (
+                    <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl overflow-hidden border-2 border-[#D7B65A]/40 shadow-2xl mx-auto ring-4 ring-[#D7B65A]/20 bg-[#0B1728]">
+                      <img
+                        src={selectedMember.image}
+                        alt={selectedMember.name}
+                        loading="eager"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
+                  ) : (
+                    <MemberAvatar
+                      src={selectedMember.image}
+                      name={selectedMember.name}
+                      size="xl"
+                      className="mx-auto shadow-2xl ring-4 ring-[#D7B65A]/30 !w-36 !h-36 sm:!w-44 sm:!h-44"
+                    />
+                  )}
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#07111F] text-[#D7B65A] border border-[#D7B65A]/40 whitespace-nowrap shadow-md">
+                    Rotaract LIA
+                  </div>
+                </div>
+
+                <h3 id="leadership-member-modal-title" className="font-heading font-extrabold text-xl sm:text-2xl text-white mt-2">
+                  {selectedMember.name}
+                </h3>
+                <div className="text-xs font-bold text-[#D7B65A] uppercase tracking-widest mt-1">
+                  {selectedMember.position} • {selectedMember.term}
+                </div>
+                {selectedMember.department && (
+                  <div className="text-xs text-slate-300 mt-1 font-medium">
+                    {selectedMember.department}
+                  </div>
+                )}
+              </div>
+
+              {selectedMember.bio && (
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-6 border-t border-b border-white/10 py-4 font-normal">
+                  {selectedMember.bio}
+                </p>
+              )}
+
+              <div className="space-y-3 text-xs text-slate-300 mb-6">
+                {selectedMember.collegeOrCompany && (
+                  <div className="flex items-center space-x-2.5">
+                    <Building className="w-4 h-4 text-[#D7B65A] shrink-0" />
+                    <span>{selectedMember.collegeOrCompany}</span>
+                  </div>
+                )}
+                <div className="flex items-center space-x-2.5">
+                  <ShieldCheck className="w-4 h-4 text-[#10B981] shrink-0" />
+                  <span>Rotaract District 3206 Official Leader</span>
+                </div>
+              </div>
+
+              {/* Social Links if available */}
+              {(selectedMember.linkedin || selectedMember.instagram) && (
+                <div className="flex items-center justify-center space-x-3 mb-6 pt-3 border-t border-white/10">
+                  {selectedMember.linkedin && (
+                    <a
+                      href={selectedMember.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-200 flex items-center space-x-2 transition-colors focus-ring"
+                    >
+                      <LinkedinIcon className="w-4 h-4 text-[#0A66C2]" />
+                      <span>LinkedIn</span>
+                    </a>
+                  )}
+                  {selectedMember.instagram && (
+                    <a
+                      href={selectedMember.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-200 flex items-center space-x-2 transition-colors focus-ring"
+                    >
+                      <InstagramIcon className="w-4 h-4 text-[#E4405F]" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {selectedMember.letterImage && (
+                <div className="pt-2">
+                  <button
+                    onClick={() => {
+                      const m = selectedMember;
+                      setSelectedMember(null);
+                      setSelectedLetter(m);
+                    }}
+                    className="w-full btn-liquid-glass py-3 rounded-xl text-xs font-bold text-[#E8D89A] flex items-center justify-center space-x-2 focus-ring cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-[#D7B65A]" />
+                    <span>View Official Appointment Letter</span>
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Appointment Letter Liquid Glass Modal */}
       <AnimatePresence>

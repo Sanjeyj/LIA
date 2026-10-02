@@ -429,12 +429,30 @@ export const TeamPage: React.FC = () => {
               </button>
 
               <div className="text-center mb-6">
-                <MemberAvatar
-                  src={selectedMember.image}
-                  name={selectedMember.name}
-                  size="lg"
-                  className="mx-auto mb-4 shadow-2xl ring-4 ring-[#D7B65A]/30"
-                />
+                {/* Big Image Display */}
+                <div className="relative inline-block mb-4">
+                  {selectedMember.image ? (
+                    <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl overflow-hidden border-2 border-[#D7B65A]/40 shadow-2xl mx-auto ring-4 ring-[#D7B65A]/20 bg-[#0B1728]">
+                      <img
+                        src={selectedMember.image}
+                        alt={selectedMember.name}
+                        loading="eager"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
+                  ) : (
+                    <MemberAvatar
+                      src={selectedMember.image}
+                      name={selectedMember.name}
+                      size="xl"
+                      className="mx-auto shadow-2xl ring-4 ring-[#D7B65A]/30 !w-36 !h-36 sm:!w-44 sm:!h-44"
+                    />
+                  )}
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#07111F] text-[#D7B65A] border border-[#D7B65A]/40 whitespace-nowrap shadow-md">
+                    Rotaract LIA
+                  </div>
+                </div>
 
                 <h3 id="member-modal-title" className="font-heading font-extrabold text-xl sm:text-2xl text-white">
                   {selectedMember.name}
