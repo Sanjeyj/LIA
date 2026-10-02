@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getAssetUrl } from '../utils/assetHelper';
 
 interface MemberAvatarProps {
   src?: string;
@@ -24,6 +25,11 @@ export const MemberAvatar: React.FC<MemberAvatarProps> = ({
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const initials = getInitials(name);
+  const finalSrc = src ? getAssetUrl(src) : undefined;
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [src]);
 
   const sizeClasses = {
     sm: 'w-10 h-10 text-xs',
@@ -34,14 +40,17 @@ export const MemberAvatar: React.FC<MemberAvatarProps> = ({
 
   const containerSize = sizeClasses[size] || sizeClasses.md;
 
-  if (src && !imageFailed) {
+  if (finalSrc && !imageFailed) {
     return (
       <div className={`relative overflow-hidden rounded-2xl bg-[#0B1728] border border-white/10 shadow-lg ${containerSize} ${className}`}>
         <img
-          src={src}
+          src={finalSrc}
           alt={`Photo of ${name}`}
           className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
-          onError={() => setImageFailed(true)}
+          onError={() => {
+            console.warn(`Failed to load avatar for ${name} at ${finalSrc}`);
+            setImageFailed(true);
+          }}
           loading="lazy"
         />
       </div>

@@ -8,6 +8,8 @@ import { getPublishedProjects } from "../services/projects";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
+import { getAssetUrl } from "../utils/assetHelper";
+
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
   const staticMatch = PROJECTS.find(
     (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
@@ -21,9 +23,11 @@ function mapSupabaseProjectToPublicProject(dbProj: any): Project {
     year: dbProj.year || new Date().getFullYear(),
     description: dbProj.description || staticMatch?.description || "",
     shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || "",
-    image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== "")
-      ? dbProj.cover_image_url
-      : (staticMatch?.image || "/assets/events/football.jpg"),
+    image: getAssetUrl(
+      (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== "")
+        ? dbProj.cover_image_url
+        : (staticMatch?.image || "/assets/events/football.jpg")
+    ),
     featured: Boolean(dbProj.featured),
     impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
     collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
@@ -128,7 +132,7 @@ export const FeaturedProjects = () => {
             >
               <div className="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
                 <img
-                  src={heroProject.image}
+                  src={getAssetUrl(heroProject.image)}
                   alt={heroProject.title}
                   loading="lazy"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -199,7 +203,7 @@ export const FeaturedProjects = () => {
                 >
                   <div className="relative h-44 sm:h-48 overflow-hidden">
                     <img
-                      src={proj.image}
+                      src={getAssetUrl(proj.image)}
                       alt={proj.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -248,7 +252,7 @@ export const FeaturedProjects = () => {
               <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                 <div className="lg:col-span-6 relative h-64 lg:h-80 overflow-hidden">
                   <img
-                    src={wideProject.image}
+                    src={getAssetUrl(wideProject.image)}
                     alt={wideProject.title}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -332,7 +336,7 @@ export const FeaturedProjects = () => {
               {/* Modal Banner */}
               <div className="relative h-44 sm:h-60 md:h-72 w-full shrink-0">
                 <img
-                  src={selectedProject.image}
+                  src={getAssetUrl(selectedProject.image)}
                   alt={selectedProject.title}
                   className="w-full h-full object-cover"
                 />

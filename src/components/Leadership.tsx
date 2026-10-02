@@ -7,14 +7,25 @@ import { getPublishedTeamMembers } from "../services/team";
 import { MemberAvatar } from "./MemberAvatar";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
+import { getAssetUrl } from "../utils/assetHelper";
 
-function normalize(s?: string) { return (s || "").toLowerCase().replace(/rtr\.?\s*/i, "").trim(); }
+function normalize(s?: string) {
+  return (s || "")
+    .toLowerCase()
+    .replace(/^rtr\.?\s*/i, "")
+    .replace(/^ipp\.?\s*/i, "")
+    .replace(/^pp\.?\s*/i, "")
+    .replace(/[^a-z0-9]/g, "")
+    .trim();
+}
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
   const staticMatch = TEAM_MEMBERS.find(
     (m) =>
       m.id === dbMember.id ||
-      normalize(m.name) === normalize(dbMember.name)
+      normalize(m.name) === normalize(dbMember.name) ||
+      (m.name && dbMember.name && normalize(m.name).includes(normalize(dbMember.name))) ||
+      (m.name && dbMember.name && normalize(dbMember.name).includes(normalize(m.name)))
   );
   return {
     id: dbMember.id,
@@ -23,13 +34,13 @@ function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
     roleCategory: dbMember.role_category || staticMatch?.roleCategory || "MEMBER",
     department: dbMember.department || staticMatch?.department,
     term: dbMember.term || "2026–27",
-    // Prefer static image — DB often has null for profile_image_url
+    // Prefer static image if DB has null/empty
     image: (dbMember.profile_image_url && dbMember.profile_image_url.trim() !== "")
       ? dbMember.profile_image_url
-      : staticMatch?.image,
+      : (staticMatch?.image || undefined),
     letterImage: (dbMember.letter_image_url && dbMember.letter_image_url.trim() !== "")
       ? dbMember.letter_image_url
-      : staticMatch?.letterImage,
+      : (staticMatch?.letterImage || undefined),
     bio: dbMember.bio || staticMatch?.bio || undefined,
     collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
     bloodGroup: dbMember.blood_group || staticMatch?.bloodGroup,
@@ -135,7 +146,7 @@ export const Leadership = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-center">
               <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 sm:p-8 bg-[#07111F]/90 rounded-2xl border border-[#D7B65A]/30 shadow-inner">
                 <MemberAvatar
-                  src="/assets/members/hariharan.jpg"
+                  src={president.image || "/assets/members/hariharan.jpg"}
                   name={president.name}
                   size="xl"
                   className="mb-4 sm:mb-5 shadow-2xl ring-4 ring-[#D7B65A]/30"
@@ -295,7 +306,7 @@ export const Leadership = () => {
               <div className="overflow-y-auto mt-3 p-3 bg-[#040812] rounded-2xl flex items-center justify-center border border-white/10">
                 {selectedLetter.letterImage && (
                   <img
-                    src={selectedLetter.letterImage}
+                    src={getAssetUrl(selectedLetter.letterImage)}
                     alt={`Appointment letter of ${selectedLetter.name}`}
                     loading="lazy"
                     className="max-h-[65vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"

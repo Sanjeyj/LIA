@@ -43,7 +43,16 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/(events|members|letters|logos)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*\\.(js|css))",
       "headers": [
         {
           "key": "Cache-Control",

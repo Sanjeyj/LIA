@@ -16,6 +16,7 @@ import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { SITE_CONFIG, getCanonicalUrl } from '../config/site';
+import { getAssetUrl } from '../utils/assetHelper';
 
 function mapDbProjectToPublicProject(dbProj: any): PublicProject {
   const staticMatch = PROJECTS.find(
@@ -30,7 +31,11 @@ function mapDbProjectToPublicProject(dbProj: any): PublicProject {
     year: dbProj.year || new Date().getFullYear(),
     description: dbProj.description || staticMatch?.description || '',
     shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || '',
-    image: dbProj.cover_image_url || staticMatch?.image || '/assets/events/football.jpg',
+    image: getAssetUrl(
+      (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '')
+        ? dbProj.cover_image_url
+        : (staticMatch?.image || '/assets/events/football.jpg')
+    ),
     featured: Boolean(dbProj.featured),
     impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
     collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
@@ -253,7 +258,7 @@ export const ProjectsPage: React.FC = () => {
                       {/* Image Banner */}
                       <div className="relative h-56 sm:h-64 overflow-hidden">
                         <img
-                          src={proj.image || '/assets/events/the-one.jpg'}
+                          src={getAssetUrl(proj.image || '/assets/events/football.jpg')}
                           alt={proj.title}
                           loading="lazy"
                           className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"

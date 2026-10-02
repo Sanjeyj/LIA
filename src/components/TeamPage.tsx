@@ -37,26 +37,36 @@ import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { getCanonicalUrl } from '../config/site';
 
-function normalize(s?: string) { return (s || "").toLowerCase().replace(/rtr\.?\s*/i, "").trim(); }
+function normalize(s?: string) {
+  return (s || "")
+    .toLowerCase()
+    .replace(/^rtr\.?\s*/i, "")
+    .replace(/^ipp\.?\s*/i, "")
+    .replace(/^pp\.?\s*/i, "")
+    .replace(/[^a-z0-9]/g, "")
+    .trim();
+}
 
 function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
   const staticMatch = TEAM_MEMBERS.find(
     (m) =>
       m.id === dbMember.id ||
-      normalize(m.name) === normalize(dbMember.name)
+      normalize(m.name) === normalize(dbMember.name) ||
+      (m.name && dbMember.name && normalize(m.name).includes(normalize(dbMember.name))) ||
+      (m.name && dbMember.name && normalize(dbMember.name).includes(normalize(m.name)))
   );
   return {
     id: dbMember.id,
     name: dbMember.name,
     position: dbMember.designation || staticMatch?.position,
     term: dbMember.term || '2026–27',
-    // Prefer static image — DB often has null for profile_image_url
+    // Prefer static image if DB has null/empty
     image: (dbMember.profile_image_url && dbMember.profile_image_url.trim() !== '')
       ? dbMember.profile_image_url
-      : staticMatch?.image,
+      : (staticMatch?.image || undefined),
     letterImage: (dbMember.letter_image_url && dbMember.letter_image_url.trim() !== '')
       ? dbMember.letter_image_url
-      : staticMatch?.letterImage,
+      : (staticMatch?.letterImage || undefined),
     bio: dbMember.bio || staticMatch?.bio || undefined,
     collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
     department: dbMember.department || staticMatch?.department || undefined,

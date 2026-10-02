@@ -9,6 +9,8 @@ import { getPublishedEvents } from "../services/events";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
 
+import { getAssetUrl } from "../utils/assetHelper";
+
 function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
   const staticMatch = EVENTS.find(
     (ev) => ev.id === dbEvent.id || ev.slug === dbEvent.slug || ev.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
@@ -26,9 +28,11 @@ function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
     location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
     description: dbEvent.description || staticMatch?.description || "",
     shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || "",
-    image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== "")
-      ? dbEvent.cover_image_url
-      : (staticMatch?.image || "/assets/events/the-one.jpg"),
+    image: getAssetUrl(
+      (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== "")
+        ? dbEvent.cover_image_url
+        : (staticMatch?.image || "/assets/events/the-one.jpg")
+    ),
     featured: Boolean(dbEvent.featured),
     organizerType: dbEvent.organizer_type || staticMatch?.organizerType || "LIA",
     liaRole: dbEvent.lia_role || staticMatch?.liaRole || "ORGANIZER",
@@ -125,7 +129,7 @@ export const Events = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
               <div className="lg:col-span-7 relative h-56 sm:h-72 lg:h-96 overflow-hidden">
                 <img
-                  src={featuredEvent.image}
+                  src={getAssetUrl(featuredEvent.image)}
                   alt={featuredEvent.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -228,7 +232,7 @@ export const Events = () => {
                 >
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={ev.image || "/assets/events/the-one.jpg"}
+                      src={getAssetUrl(ev.image || "/assets/events/the-one.jpg")}
                       alt={ev.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

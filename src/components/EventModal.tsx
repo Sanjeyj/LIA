@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, MapPin, ShieldCheck, Users, Tag, ExternalLink } from "lucide-react";
 import type { Event } from "../types";
 
+import { getAssetUrl } from "../utils/assetHelper";
+
 interface EventModalProps {
   event: Event | null;
   onClose: () => void;
@@ -80,7 +82,7 @@ export const EventModal = ({ event, onClose }: EventModalProps) => {
           <div className="relative h-44 sm:h-60 md:h-72 w-full shrink-0">
             {event.image ? (
               <img
-                src={event.image}
+                src={getAssetUrl(event.image)}
                 alt={event.title}
                 className="w-full h-full object-cover object-center"
               />
