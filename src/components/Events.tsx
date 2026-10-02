@@ -127,7 +127,8 @@ export const Events = () => {
                 <img
                   src={featuredEvent.image}
                   alt={featuredEvent.title}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#050B14]/90 via-[#050B14]/30 lg:via-transparent to-transparent lg:to-[#050B14]" />
@@ -230,7 +231,8 @@ export const Events = () => {
                     <img
                       src={ev.image || "/assets/events/the-one.jpg"}
                       alt={ev.title}
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-transparent" />

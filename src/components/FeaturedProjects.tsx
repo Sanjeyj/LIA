@@ -130,7 +130,8 @@ export const FeaturedProjects = () => {
                 <img
                   src={heroProject.image}
                   alt={heroProject.title}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent" />
@@ -201,7 +202,8 @@ export const FeaturedProjects = () => {
                     <img
                       src={proj.image}
                       alt={proj.title}
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/20 to-transparent" />
@@ -250,7 +252,8 @@ export const FeaturedProjects = () => {
                   <img
                     src={wideProject.image}
                     alt={wideProject.title}
-                    loading="lazy"
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent to-[#050B14]/70" />

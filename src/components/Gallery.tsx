@@ -141,7 +141,8 @@ export const Gallery = () => {
                   <img
                     src={item.image}
                     alt={item.title}
-                    loading="lazy"
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
