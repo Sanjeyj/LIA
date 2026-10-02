@@ -9,6 +9,9 @@ export function getAssetUrl(path?: string | null): string {
   }
   // Ensure path starts with /
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  if (cleanPath.includes(`v=${ASSET_VERSION}`)) {
+    return cleanPath;
+  }
   const separator = cleanPath.includes('?') ? '&' : '?';
   return `${cleanPath}${separator}v=${ASSET_VERSION}`;
 }

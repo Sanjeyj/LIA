@@ -28,11 +28,9 @@ function mapSupabaseEventToPublicEvent(dbEvent: any): Event {
     location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
     description: dbEvent.description || staticMatch?.description || "",
     shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || "",
-    image: getAssetUrl(
-      (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== "")
-        ? dbEvent.cover_image_url
-        : (staticMatch?.image || "/assets/events/the-one.jpg")
-    ),
+    image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== "")
+      ? dbEvent.cover_image_url
+      : (staticMatch?.image || "/assets/events/the-one.jpg"),
     featured: Boolean(dbEvent.featured),
     organizerType: dbEvent.organizer_type || staticMatch?.organizerType || "LIA",
     liaRole: dbEvent.lia_role || staticMatch?.liaRole || "ORGANIZER",

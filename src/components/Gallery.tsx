@@ -18,11 +18,9 @@ function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
     id: dbItem.id,
     title: dbItem.title || dbItem.caption || staticMatch?.title || "Club Photo",
     category: (dbItem.category || staticMatch?.category || "EVENTS") as any,
-    image: getAssetUrl(
-      (dbItem.image_url && dbItem.image_url.trim() !== "")
-        ? dbItem.image_url
-        : (staticMatch?.image || "/assets/events/the-one.jpg")
-    ),
+    image: (dbItem.image_url && dbItem.image_url.trim() !== "")
+      ? dbItem.image_url
+      : (staticMatch?.image || "/assets/events/the-one.jpg"),
     date: dbItem.date || staticMatch?.date || "",
     caption: dbItem.caption || staticMatch?.caption || undefined,
   };
@@ -40,7 +38,13 @@ export const Gallery = () => {
     getPublishedGalleryImages()
       .then((data) => {
         if (isMounted && data && data.length > 0) {
-          setGalleryList(data.map(mapSupabaseGalleryToPublic));
+          // Only override if Supabase items have actual image URLs
+          const itemsWithImages = data.map(mapSupabaseGalleryToPublic).filter(
+            (item) => item.image && item.image !== ''
+          );
+          if (itemsWithImages.length > 0) {
+            setGalleryList(itemsWithImages);
+          }
         }
       })
       .catch((err) => {

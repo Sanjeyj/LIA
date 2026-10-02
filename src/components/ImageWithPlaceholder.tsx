@@ -41,6 +41,7 @@ export const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
+        onError={() => setIsLoaded(true)}
         className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] ${
           isLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}

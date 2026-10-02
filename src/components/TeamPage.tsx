@@ -36,6 +36,7 @@ import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
 import { getCanonicalUrl } from '../config/site';
+import { getAssetUrl } from '../utils/assetHelper';
 
 function normalize(s?: string) {
   return (s || "")
@@ -571,7 +572,7 @@ export const TeamPage: React.FC = () => {
               <div className="overflow-y-auto mt-3 p-3 bg-[#040812] rounded-2xl flex items-center justify-center border border-white/10">
                 {showLetterModal.letterImage && (
                   <img
-                    src={showLetterModal.letterImage}
+                    src={getAssetUrl(showLetterModal.letterImage)}
                     alt={`Appointment letter of ${showLetterModal.name}`}
                     loading="lazy"
                     className="max-h-[65vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"

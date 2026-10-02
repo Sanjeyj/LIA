@@ -21,6 +21,7 @@ import { getPublishedGalleryImages } from "../services/gallery";
 import type { GalleryImage } from "../types/supabase";
 import { GALLERY_ITEMS } from "../data/gallery";
 import type { GalleryItem } from "../types";
+import { getAssetUrl } from "../utils/assetHelper";
 
 function staticToGalleryImage(s: GalleryItem): GalleryImage {
   return {
@@ -112,7 +113,7 @@ const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) =>
       >
         <div className="relative rounded-2xl overflow-hidden w-full max-h-[72vh] border border-white/20 shadow-2xl bg-black">
           <img
-            src={photo.image_url}
+            src={getAssetUrl(photo.image_url)}
             alt={photo.title ?? "Gallery photo"}
             className="max-h-[72vh] w-full object-contain"
             loading="lazy"
@@ -167,7 +168,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onOpen }) => {
             className={`group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 bg-[#07111F] ${isLarge ? "sm:col-span-2 aspect-[16/9]" : "aspect-[16/9]"}`}
           >
             <img
-              src={photo.image_url}
+              src={getAssetUrl(photo.image_url)}
               alt={photo.title ?? "Gallery photo"}
               loading="lazy"
               className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -222,10 +223,17 @@ export const GalleryPage = () => {
         const albumData = await getPublishedAlbumsWithImages();
         const flatImages = await getPublishedGalleryImages();
         if (!mounted) return;
-        const hasDatabaseContent = albumData.length > 0 || flatImages.length > 0;
-        if (hasDatabaseContent) {
-          setAlbums(albumData);
-          setAllPhotos(flatImages.length > 0 ? flatImages : GALLERY_ITEMS.map(staticToGalleryImage));
+        const validAlbums = (albumData || []).filter(
+          (a) => (a.images && a.images.length > 0) || (a.cover_image_url && a.cover_image_url.trim() !== "")
+        );
+        const validFlatImages = (flatImages || []).filter(
+          (img) => img.image_url && img.image_url.trim() !== ""
+        );
+        if (validAlbums.length > 0) {
+          setAlbums(validAlbums);
+        }
+        if (validFlatImages.length > 0) {
+          setAllPhotos(validFlatImages);
         } else {
           setAllPhotos(GALLERY_ITEMS.map(staticToGalleryImage));
         }
@@ -361,7 +369,7 @@ export const GalleryPage = () => {
                           className="group relative rounded-2xl overflow-hidden glass-card border border-white/10 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 aspect-[16/9] bg-[#07111F]"
                         >
                           {cover ? (
-                            <img src={cover} alt={album.name} loading="lazy" className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
+                            <img src={getAssetUrl(cover)} alt={album.name} loading="lazy" className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#10233D] to-[#07111F] flex items-center justify-center">
                               <ImageIcon className="w-12 h-12 text-white/10" />
