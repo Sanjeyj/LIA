@@ -11,4 +11,4 @@ Disallow: /admin/login
 Disallow: /admin/preview
 Disallow: /admin/preview/*
 
-Sitemap: https://lia-website-six.vercel.app/sitemap.xml
+Sitemap: https://lia-website-nu.vercel.app/sitemap.xml

@@ -107,7 +107,7 @@ export const PostDetailPage: React.FC = () => {
           name: 'Rotaract Club of Lead India Ahead',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://lia-website-six.vercel.app/assets/logos/lia-shield.png',
+            url: 'https://lia-website-nu.vercel.app/assets/logos/lia-shield.png',
           },
         },
         mainEntityOfPage: {
