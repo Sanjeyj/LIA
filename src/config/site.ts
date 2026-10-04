@@ -6,7 +6,7 @@ import { CLUB_INFO } from '../data/club';
  */
 export const SITE_URL = (
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SITE_URL) ||
-  'https://lia-website-six.vercel.app'
+  'https://lia-website-nu.vercel.app'
 ).replace(/\/+$/, '');
 
 export const SITE_CONFIG = {
@@ -36,6 +36,21 @@ export const SITE_CONFIG = {
     president: CLUB_INFO.president,
   },
 };
+
+/**
+ * Resolves static asset paths with cache-busting query parameter to force browsers/CDNs to load the latest media.
+ */
+export function getAssetUrl(imagePath?: string | null, fallback: string = '/assets/events/the-one.jpg'): string {
+  if (!imagePath || typeof imagePath !== 'string' || imagePath.trim() === '') {
+    return fallback ? getAssetUrl(fallback, '') : '';
+  }
+  const clean = imagePath.trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:')) {
+    return clean;
+  }
+  const normalized = clean.startsWith('/') ? clean : `/${clean}`;
+  return normalized.includes('?') ? normalized : `${normalized}?v=20261003`;
+}
 
 /**
  * Generates an absolute canonical URL from a relative path.

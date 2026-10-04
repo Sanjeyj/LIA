@@ -20,38 +20,42 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
-import { SITE_CONFIG, getAbsoluteImageUrl } from '../config/site';
+import { SITE_CONFIG, getAbsoluteImageUrl, getAssetUrl } from '../config/site';
 
 function mapDbEventToPublicEvent(dbEvent: any): PublicEvent {
+  // DB is the source of truth. Static data is ONLY used for fields
+  // that the DB record genuinely does not have (null/undefined).
   const staticMatch = EVENTS.find(
-    (e) => e.id === dbEvent.id || e.slug === dbEvent.slug || e.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
+    (e) => e.id === dbEvent.id || e.slug === dbEvent.slug
   );
+
+  const dbImage = dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== '' ? dbEvent.cover_image_url : null;
+  const staticImage = staticMatch?.image ?? '/assets/events/the-one.jpg';
+
   return {
     id: dbEvent.id,
     title: dbEvent.title,
-    subtitle: dbEvent.subtitle || staticMatch?.subtitle || undefined,
+    subtitle: dbEvent.subtitle ?? staticMatch?.subtitle ?? undefined,
     slug: dbEvent.slug,
-    date: dbEvent.event_date || staticMatch?.date || undefined,
-    displayDate: dbEvent.display_date || dbEvent.event_date || staticMatch?.displayDate || undefined,
-    year: dbEvent.year || (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year || new Date().getFullYear())),
-    category: dbEvent.category || staticMatch?.category || 'General',
-    status: (dbEvent.status === 'published' ? 'completed' : (dbEvent.status || staticMatch?.status || 'upcoming')) as any,
-    location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
-    description: dbEvent.description || staticMatch?.description || '',
-    shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || '',
-    image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== '')
-      ? dbEvent.cover_image_url
-      : (staticMatch?.image || '/assets/events/the-one.jpg'),
-    featured: Boolean(dbEvent.featured ?? staticMatch?.featured),
-    organizerType: dbEvent.organizer_type || staticMatch?.organizerType || 'LIA',
-    liaRole: dbEvent.lia_role || staticMatch?.liaRole || 'ORGANIZER',
-    organizer: dbEvent.organizer || staticMatch?.organizer || undefined,
-    collaborators: dbEvent.collaborators || staticMatch?.collaborators || [],
-    tags: dbEvent.tags || staticMatch?.tags || [],
+    date: dbEvent.event_date ?? staticMatch?.date ?? undefined,
+    displayDate: dbEvent.display_date ?? dbEvent.event_date ?? staticMatch?.displayDate ?? undefined,
+    year: dbEvent.year ?? (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year ?? new Date().getFullYear())),
+    category: dbEvent.category ?? staticMatch?.category ?? 'General',
+    status: (dbEvent.status === 'published' ? 'completed' : (dbEvent.status ?? staticMatch?.status ?? 'upcoming')) as any,
+    location: dbEvent.venue ?? dbEvent.city ?? staticMatch?.location ?? undefined,
+    description: dbEvent.description ?? staticMatch?.description ?? '',
+    shortDescription: dbEvent.short_description ?? dbEvent.description ?? staticMatch?.shortDescription ?? '',
+    image: getAssetUrl(dbImage ?? staticImage),
+    featured: dbEvent.featured !== null && dbEvent.featured !== undefined ? Boolean(dbEvent.featured) : Boolean(staticMatch?.featured),
+    organizerType: dbEvent.organizer_type ?? staticMatch?.organizerType ?? 'LIA',
+    liaRole: dbEvent.lia_role ?? staticMatch?.liaRole ?? 'ORGANIZER',
+    organizer: dbEvent.organizer ?? staticMatch?.organizer ?? undefined,
+    collaborators: Array.isArray(dbEvent.collaborators) ? dbEvent.collaborators : (staticMatch?.collaborators ?? []),
+    tags: Array.isArray(dbEvent.tags) ? dbEvent.tags : (staticMatch?.tags ?? []),
     source: dbEvent.source_platform
       ? {
           platform: dbEvent.source_platform as any,
-          url: dbEvent.source_url || undefined,
+          url: dbEvent.source_url ?? undefined,
           verified: Boolean(dbEvent.source_verified),
         }
       : staticMatch?.source,
@@ -258,6 +262,12 @@ export const EventDetailPage: React.FC = () => {
                     <img
                       src={event.image}
                       alt={event.title}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.includes('/assets/events/the-one.jpg')) {
+                          target.src = '/assets/events/the-one.jpg?v=20261003';
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c192e] via-[#0c192e]/40 to-transparent" />

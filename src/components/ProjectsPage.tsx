@@ -15,31 +15,32 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
-import { SITE_CONFIG, getCanonicalUrl } from '../config/site';
+import { SITE_CONFIG, getCanonicalUrl, getAssetUrl } from '../config/site';
 
 function mapDbProjectToPublicProject(dbProj: any): PublicProject {
+  // DB is the source of truth — static data only fills in genuinely missing fields
   const staticMatch = PROJECTS.find(
-    (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
+    (p) => p.id === dbProj.id || p.slug === dbProj.slug
   );
+  const dbImage = dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '' ? dbProj.cover_image_url : null;
+  const staticImage = staticMatch?.image ?? '/assets/events/football.jpg';
   return {
     id: dbProj.id,
     title: dbProj.title,
     slug: dbProj.slug,
-    category: dbProj.category || staticMatch?.category || 'Community Service',
-    date: dbProj.project_date || `${dbProj.year || (staticMatch?.year || new Date().getFullYear())}`,
-    year: dbProj.year || staticMatch?.year || new Date().getFullYear(),
-    description: dbProj.description || staticMatch?.description || '',
-    shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || '',
-    image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '')
-      ? dbProj.cover_image_url
-      : (staticMatch?.image || '/assets/events/football.jpg'),
-    featured: Boolean(dbProj.featured ?? staticMatch?.featured),
-    impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
-    collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
+    category: dbProj.category ?? staticMatch?.category ?? 'Community Service',
+    date: dbProj.project_date ?? `${dbProj.year ?? (staticMatch?.year ?? new Date().getFullYear())}`,
+    year: dbProj.year ?? staticMatch?.year ?? new Date().getFullYear(),
+    description: dbProj.description ?? staticMatch?.description ?? '',
+    shortDescription: dbProj.short_description ?? dbProj.description ?? staticMatch?.shortDescription ?? '',
+    image: getAssetUrl(dbImage ?? staticImage),
+    featured: dbProj.featured !== null && dbProj.featured !== undefined ? Boolean(dbProj.featured) : Boolean(staticMatch?.featured),
+    impactMetrics: dbProj.impact_metrics ?? staticMatch?.impactMetrics ?? undefined,
+    collaborators: Array.isArray(dbProj.collaborators) ? dbProj.collaborators : (staticMatch?.collaborators ?? undefined),
     source: dbProj.source_platform
       ? {
           platform: dbProj.source_platform as any,
-          url: dbProj.source_url || undefined,
+          url: dbProj.source_url ?? undefined,
           verified: Boolean(dbProj.source_verified),
         }
       : staticMatch?.source,
@@ -47,7 +48,9 @@ function mapDbProjectToPublicProject(dbProj: any): PublicProject {
 }
 
 export const ProjectsPage: React.FC = () => {
-  const [projectsList, setProjectsList] = useState<PublicProject[]>(PROJECTS);
+  const [projectsList, setProjectsList] = useState<PublicProject[]>(() =>
+    PROJECTS.map((p) => ({ ...p, image: getAssetUrl(p.image) }))
+  );
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [selectedYear, setSelectedYear] = useState('ALL');
@@ -255,10 +258,16 @@ export const ProjectsPage: React.FC = () => {
                       {/* Image Banner */}
                       <div className="relative h-56 sm:h-64 overflow-hidden">
                         <img
-                          src={proj.image || '/assets/events/the-one.jpg'}
+                          src={proj.image || '/assets/events/the-one.jpg?v=20261003'}
                           alt={proj.title}
                           loading="eager"
                           decoding="async"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (!target.src.includes('/assets/events/the-one.jpg')) {
+                              target.src = '/assets/events/the-one.jpg?v=20261003';
+                            }
+                          }}
                           className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-[#0B1728]/30 to-transparent" />

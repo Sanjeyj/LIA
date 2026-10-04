@@ -7,25 +7,26 @@ import type { GalleryItem } from "../types";
 import { getPublishedGalleryImages } from "../services/gallery";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
+import { getAssetUrl } from "../config/site";
 
 function mapSupabaseGalleryToPublic(dbItem: any): GalleryItem {
-  const staticMatch = GALLERY_ITEMS.find(
-    (g) => g.id === dbItem.id || g.title?.toLowerCase().trim() === dbItem.title?.toLowerCase().trim()
-  );
+  // DB is the source of truth — static only fills genuinely missing fields
+  const staticMatch = GALLERY_ITEMS.find((g) => g.id === dbItem.id);
+  const dbImage = dbItem.image_url && dbItem.image_url.trim() !== '' ? dbItem.image_url : null;
   return {
     id: dbItem.id,
-    title: dbItem.title || dbItem.caption || staticMatch?.title || "Club Photo",
-    category: (dbItem.category || staticMatch?.category || "EVENTS") as any,
-    image: (dbItem.image_url && dbItem.image_url.trim() !== "")
-      ? dbItem.image_url
-      : (staticMatch?.image || "/assets/events/the-one.jpg"),
-    date: dbItem.date || staticMatch?.date || "",
-    caption: dbItem.caption || staticMatch?.caption || undefined,
+    title: dbItem.title ?? dbItem.caption ?? staticMatch?.title ?? "Club Photo",
+    category: (dbItem.category ?? staticMatch?.category ?? "EVENTS") as any,
+    image: getAssetUrl(dbImage ?? staticMatch?.image ?? "/assets/events/the-one.jpg"),
+    date: dbItem.date ?? staticMatch?.date ?? "",
+    caption: dbItem.caption ?? staticMatch?.caption ?? undefined,
   };
 }
 
 export const Gallery = () => {
-  const [galleryList, setGalleryList] = useState<GalleryItem[]>(GALLERY_ITEMS);
+  const [galleryList, setGalleryList] = useState<GalleryItem[]>(() =>
+    GALLERY_ITEMS.map((g) => ({ ...g, image: getAssetUrl(g.image) }))
+  );
   const [activeCategory, setActiveCategory] = useState<string>("ALL");
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
@@ -143,6 +144,12 @@ export const Gallery = () => {
                     alt={item.title}
                     loading="eager"
                     decoding="async"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('/assets/events/the-one.jpg')) {
+                        target.src = '/assets/events/the-one.jpg?v=20261003';
+                      }
+                    }}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />

@@ -19,31 +19,31 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
-import { SITE_CONFIG, getAbsoluteImageUrl } from '../config/site';
+import { SITE_CONFIG, getAbsoluteImageUrl, getAssetUrl } from '../config/site';
 
 function mapDbProjectToPublicProject(dbProj: any): PublicProject {
+  // DB is the source of truth — static only fills genuinely missing fields
   const staticMatch = PROJECTS.find(
-    (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
+    (p) => p.id === dbProj.id || p.slug === dbProj.slug
   );
+  const dbImage = dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '' ? dbProj.cover_image_url : null;
   return {
     id: dbProj.id,
     title: dbProj.title,
     slug: dbProj.slug,
-    category: dbProj.category || staticMatch?.category || 'Community Service',
-    date: dbProj.project_date || `${dbProj.year || (staticMatch?.year || new Date().getFullYear())}`,
-    year: dbProj.year || staticMatch?.year || new Date().getFullYear(),
-    description: dbProj.description || staticMatch?.description || '',
-    shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || '',
-    image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== '')
-      ? dbProj.cover_image_url
-      : (staticMatch?.image || '/assets/events/football.jpg'),
-    featured: Boolean(dbProj.featured ?? staticMatch?.featured),
-    impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
-    collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
+    category: dbProj.category ?? staticMatch?.category ?? 'Community Service',
+    date: dbProj.project_date ?? `${dbProj.year ?? (staticMatch?.year ?? new Date().getFullYear())}`,
+    year: dbProj.year ?? staticMatch?.year ?? new Date().getFullYear(),
+    description: dbProj.description ?? staticMatch?.description ?? '',
+    shortDescription: dbProj.short_description ?? dbProj.description ?? staticMatch?.shortDescription ?? '',
+    image: getAssetUrl(dbImage ?? staticMatch?.image ?? '/assets/events/football.jpg'),
+    featured: dbProj.featured !== null && dbProj.featured !== undefined ? Boolean(dbProj.featured) : Boolean(staticMatch?.featured),
+    impactMetrics: dbProj.impact_metrics ?? staticMatch?.impactMetrics ?? undefined,
+    collaborators: Array.isArray(dbProj.collaborators) ? dbProj.collaborators : (staticMatch?.collaborators ?? undefined),
     source: dbProj.source_platform
       ? {
           platform: dbProj.source_platform as any,
-          url: dbProj.source_url || undefined,
+          url: dbProj.source_url ?? undefined,
           verified: Boolean(dbProj.source_verified),
         }
       : staticMatch?.source,
@@ -215,6 +215,12 @@ export const ProjectDetailPage: React.FC = () => {
                     <img
                       src={project.image}
                       alt={project.title}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.includes('/assets/events/football.jpg')) {
+                          target.src = '/assets/events/football.jpg?v=20261003';
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c192e] via-[#0c192e]/40 to-transparent" />

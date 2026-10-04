@@ -20,7 +20,7 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { JoinUs } from './JoinUs';
 import { SEO } from './SEO';
-import { SITE_CONFIG, getCanonicalUrl } from '../config/site';
+import { SITE_CONFIG, getCanonicalUrl, getAssetUrl } from '../config/site';
 
 // ─── Lightweight Calendar Component ─────────────────────────────────────────
 const MONTH_NAMES = [
@@ -168,35 +168,41 @@ const EventCalendarView: React.FC<CalendarViewProps> = ({ events, onSelectDate, 
 };
 
 function mapDbEventToPublicEvent(dbEvent: any): PublicEvent {
+  // DB is the source of truth. Static data is ONLY used for fields
+  // that the DB record genuinely does not have (null/undefined).
+  // Use ?? (nullish coalescing) so empty strings from DB don't fall through to statics.
   const staticMatch = EVENTS.find(
-    (e) => e.id === dbEvent.id || e.slug === dbEvent.slug || e.title?.toLowerCase().trim() === dbEvent.title?.toLowerCase().trim()
+    (e) => e.id === dbEvent.id || e.slug === dbEvent.slug
   );
+
+  // Image: DB cover_image_url wins if non-empty, else use static fallback
+  const dbImage = dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== '' ? dbEvent.cover_image_url : null;
+  const staticImage = staticMatch?.image ?? '/assets/events/the-one.jpg';
+
   return {
     id: dbEvent.id,
     title: dbEvent.title,
-    subtitle: dbEvent.subtitle || staticMatch?.subtitle || undefined,
+    subtitle: dbEvent.subtitle ?? staticMatch?.subtitle ?? undefined,
     slug: dbEvent.slug,
-    date: dbEvent.event_date || staticMatch?.date || undefined,
-    displayDate: dbEvent.display_date || dbEvent.event_date || staticMatch?.displayDate || undefined,
-    year: dbEvent.year || (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year || new Date().getFullYear())),
-    category: dbEvent.category || staticMatch?.category || 'General',
-    status: (dbEvent.status === 'published' ? 'completed' : (dbEvent.status || staticMatch?.status || 'upcoming')) as any,
-    location: dbEvent.venue || dbEvent.city || staticMatch?.location || undefined,
-    description: dbEvent.description || staticMatch?.description || '',
-    shortDescription: dbEvent.short_description || dbEvent.description || staticMatch?.shortDescription || '',
-    image: (dbEvent.cover_image_url && dbEvent.cover_image_url.trim() !== '')
-      ? dbEvent.cover_image_url
-      : (staticMatch?.image || '/assets/events/the-one.jpg'),
-    featured: Boolean(dbEvent.featured ?? staticMatch?.featured),
-    organizerType: dbEvent.organizer_type || staticMatch?.organizerType || 'LIA',
-    liaRole: dbEvent.lia_role || staticMatch?.liaRole || 'ORGANIZER',
-    organizer: dbEvent.organizer || staticMatch?.organizer || undefined,
-    collaborators: dbEvent.collaborators || staticMatch?.collaborators || [],
-    tags: dbEvent.tags || staticMatch?.tags || [],
+    date: dbEvent.event_date ?? staticMatch?.date ?? undefined,
+    displayDate: dbEvent.display_date ?? dbEvent.event_date ?? staticMatch?.displayDate ?? undefined,
+    year: dbEvent.year ?? (dbEvent.event_date ? new Date(dbEvent.event_date).getFullYear() : (staticMatch?.year ?? new Date().getFullYear())),
+    category: dbEvent.category ?? staticMatch?.category ?? 'General',
+    status: (dbEvent.status === 'published' ? 'completed' : (dbEvent.status ?? staticMatch?.status ?? 'upcoming')) as any,
+    location: dbEvent.venue ?? dbEvent.city ?? staticMatch?.location ?? undefined,
+    description: dbEvent.description ?? staticMatch?.description ?? '',
+    shortDescription: dbEvent.short_description ?? dbEvent.description ?? staticMatch?.shortDescription ?? '',
+    image: getAssetUrl(dbImage ?? staticImage),
+    featured: dbEvent.featured !== null && dbEvent.featured !== undefined ? Boolean(dbEvent.featured) : Boolean(staticMatch?.featured),
+    organizerType: dbEvent.organizer_type ?? staticMatch?.organizerType ?? 'LIA',
+    liaRole: dbEvent.lia_role ?? staticMatch?.liaRole ?? 'ORGANIZER',
+    organizer: dbEvent.organizer ?? staticMatch?.organizer ?? undefined,
+    collaborators: Array.isArray(dbEvent.collaborators) ? dbEvent.collaborators : (staticMatch?.collaborators ?? []),
+    tags: Array.isArray(dbEvent.tags) ? dbEvent.tags : (staticMatch?.tags ?? []),
     source: dbEvent.source_platform
       ? {
           platform: dbEvent.source_platform as any,
-          url: dbEvent.source_url || undefined,
+          url: dbEvent.source_url ?? undefined,
           verified: Boolean(dbEvent.source_verified),
         }
       : staticMatch?.source,
@@ -216,6 +222,7 @@ export const EventsPage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
 
     let isMounted = true;
+    // Always re-fetch from DB on mount — no caching so admin changes are visible immediately
     getPublishedEvents()
       .then((data) => {
         if (isMounted && data && data.length > 0) {
@@ -334,8 +341,14 @@ export const EventsPage: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-12">
                 <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-auto overflow-hidden">
                   <img
-                    src={featuredEvent.image || '/assets/events/the-one.jpg'}
+                    src={featuredEvent.image || '/assets/events/the-one.jpg?v=20261003'}
                     alt={featuredEvent.title}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('/assets/events/the-one.jpg')) {
+                        target.src = '/assets/events/the-one.jpg?v=20261003';
+                      }
+                    }}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent via-[#07111F]/30 to-[#07111F]" />
@@ -539,10 +552,16 @@ export const EventsPage: React.FC = () => {
                   >
                     <div className="relative h-48 overflow-hidden">
                       <img
-                        src={ev.image || '/assets/events/the-one.jpg'}
+                        src={ev.image || '/assets/events/the-one.jpg?v=20261003'}
                         alt={ev.title}
                         loading="eager"
                         decoding="async"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.src.includes('/assets/events/the-one.jpg')) {
+                            target.src = '/assets/events/the-one.jpg?v=20261003';
+                          }
+                        }}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-transparent to-transparent" />

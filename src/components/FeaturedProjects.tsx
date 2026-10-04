@@ -7,36 +7,40 @@ import type { Project } from "../types";
 import { getPublishedProjects } from "../services/projects";
 import { Section, SectionHeading } from "./Section";
 import { SectionReveal } from "./SectionReveal";
+import { getAssetUrl } from "../config/site";
 
 function mapSupabaseProjectToPublicProject(dbProj: any): Project {
+  // DB is the source of truth — static only fills genuinely missing fields
   const staticMatch = PROJECTS.find(
-    (p) => p.id === dbProj.id || p.slug === dbProj.slug || p.title?.toLowerCase().trim() === dbProj.title?.toLowerCase().trim()
+    (p) => p.id === dbProj.id || p.slug === dbProj.slug
   );
+  const dbImage = dbProj.cover_image_url && dbProj.cover_image_url.trim() !== "" ? dbProj.cover_image_url : null;
+  const rawImage = dbImage ?? staticMatch?.image ?? "/assets/events/football.jpg";
   return {
     id: dbProj.id,
     title: dbProj.title,
     slug: dbProj.slug,
-    category: dbProj.category || staticMatch?.category || "Community Service",
-    date: dbProj.project_date || `${dbProj.year || new Date().getFullYear()}`,
-    year: dbProj.year || new Date().getFullYear(),
-    description: dbProj.description || staticMatch?.description || "",
-    shortDescription: dbProj.short_description || dbProj.description || staticMatch?.shortDescription || "",
-    image: (dbProj.cover_image_url && dbProj.cover_image_url.trim() !== "")
-      ? dbProj.cover_image_url
-      : (staticMatch?.image || "/assets/events/football.jpg"),
+    category: dbProj.category ?? staticMatch?.category ?? "Community Service",
+    date: dbProj.project_date ?? `${dbProj.year ?? new Date().getFullYear()}`,
+    year: dbProj.year ?? new Date().getFullYear(),
+    description: dbProj.description ?? staticMatch?.description ?? "",
+    shortDescription: dbProj.short_description ?? dbProj.description ?? staticMatch?.shortDescription ?? "",
+    image: getAssetUrl(rawImage),
     featured: Boolean(dbProj.featured),
-    impactMetrics: dbProj.impact_metrics || staticMatch?.impactMetrics || undefined,
-    collaborators: dbProj.collaborators || staticMatch?.collaborators || undefined,
+    impactMetrics: dbProj.impact_metrics ?? staticMatch?.impactMetrics ?? undefined,
+    collaborators: Array.isArray(dbProj.collaborators) ? dbProj.collaborators : (staticMatch?.collaborators ?? undefined),
     source: dbProj.source_platform ? {
       platform: dbProj.source_platform as any,
-      url: dbProj.source_url || undefined,
+      url: dbProj.source_url ?? undefined,
       verified: Boolean(dbProj.source_verified),
     } : staticMatch?.source,
   };
 }
 
 export const FeaturedProjects = () => {
-  const [projectsList, setProjectsList] = useState<Project[]>(PROJECTS);
+  const [projectsList, setProjectsList] = useState<Project[]>(() =>
+    PROJECTS.map((p) => ({ ...p, image: getAssetUrl(p.image) }))
+  );
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
@@ -132,6 +136,12 @@ export const FeaturedProjects = () => {
                   alt={heroProject.title}
                   loading="eager"
                   decoding="async"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.includes('/assets/events/football.jpg')) {
+                      target.src = '/assets/events/football.jpg?v=20261003';
+                    }
+                  }}
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/30 to-transparent" />
@@ -204,6 +214,12 @@ export const FeaturedProjects = () => {
                       alt={proj.title}
                       loading="eager"
                       decoding="async"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.includes('/assets/events/dheema.jpg')) {
+                          target.src = '/assets/events/dheema.jpg?v=20261003';
+                        }
+                      }}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/20 to-transparent" />
@@ -254,6 +270,12 @@ export const FeaturedProjects = () => {
                     alt={wideProject.title}
                     loading="eager"
                     decoding="async"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('/assets/events/nalaya-vidiyal.jpg')) {
+                        target.src = '/assets/events/nalaya-vidiyal.jpg?v=20261003';
+                      }
+                    }}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent to-[#050B14]/70" />
@@ -337,6 +359,12 @@ export const FeaturedProjects = () => {
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.includes('/assets/events/football.jpg')) {
+                      target.src = '/assets/events/football.jpg?v=20261003';
+                    }
+                  }}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B1728] via-[#0B1728]/40 to-transparent" />
