@@ -45,21 +45,21 @@ function mapSupabaseTeamMemberToPublic(dbMember: any): TeamMember {
       m.id === dbMember.id ||
       normalize(m.name) === normalize(dbMember.name)
   );
+  const dbImg = (dbMember.profile_image_url && dbMember.profile_image_url.trim() !== '')
+    ? dbMember.profile_image_url
+    : undefined;
+
   return {
     id: dbMember.id,
     name: dbMember.name,
-    position: dbMember.designation || staticMatch?.position,
-    term: dbMember.term || '2026–27',
-    image: (dbMember.profile_image_url && dbMember.profile_image_url.trim() !== '')
-      ? dbMember.profile_image_url
-      : staticMatch?.image,
-    letterImage: (dbMember.letter_image_url && dbMember.letter_image_url.trim() !== '')
-      ? dbMember.letter_image_url
-      : staticMatch?.letterImage,
+    position: dbMember.designation || staticMatch?.position || 'Board Member',
+    term: dbMember.term || staticMatch?.term || '2026–27',
+    image: staticMatch?.image || dbImg,
+    letterImage: staticMatch?.letterImage || (dbMember.letter_image_url && dbMember.letter_image_url.trim() !== '' ? dbMember.letter_image_url : undefined),
     bio: dbMember.bio || staticMatch?.bio || undefined,
     collegeOrCompany: dbMember.college_company || staticMatch?.collegeOrCompany || undefined,
     department: dbMember.department || staticMatch?.department || undefined,
-    isExecutive: Boolean(dbMember.is_executive),
+    isExecutive: Boolean(dbMember.is_executive || staticMatch?.isExecutive),
     roleCategory: dbMember.role_category || staticMatch?.roleCategory || (dbMember.is_executive ? 'EXECUTIVE' : 'MEMBER'),
     linkedin: dbMember.linkedin_url || undefined,
     instagram: dbMember.instagram_url || undefined,
@@ -81,7 +81,27 @@ export const TeamPage: React.FC = () => {
     getPublishedTeamMembers()
       .then((data) => {
         if (isMounted && data && data.length > 0) {
-          setMembersList(data.map(mapSupabaseTeamMemberToPublic));
+          const dbMapped = data.map(mapSupabaseTeamMemberToPublic);
+          const merged = TEAM_MEMBERS.map((staticMember) => {
+            const dbMatch = dbMapped.find(
+              (db) => db.id === staticMember.id || normalize(db.name) === normalize(staticMember.name)
+            );
+            if (!dbMatch) return staticMember;
+            return {
+              ...staticMember,
+              ...dbMatch,
+              image: staticMember.image || dbMatch.image,
+              letterImage: staticMember.letterImage || dbMatch.letterImage,
+            };
+          });
+
+          dbMapped.forEach((dbMember) => {
+            if (!merged.some((m) => m.id === dbMember.id || normalize(m.name) === normalize(dbMember.name))) {
+              merged.push(dbMember);
+            }
+          });
+
+          setMembersList(merged);
         }
       })
       .catch((err) => {
